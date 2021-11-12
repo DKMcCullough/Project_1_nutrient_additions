@@ -1,7 +1,6 @@
 '''
-No_N_avg
-Average of the 6 trials of No N added to Proclorococcus growth
-Fitting Ben's growth data to model via met alg.
+No_N_A1
+Fitting Ben's grpwth data to model via met alg.
 created by DKM
 Location: /Users/dkm/Documents/Talmy_research/Zinser\ and\ Ben/Scripts/
 '''
@@ -32,24 +31,11 @@ Ben_data_import = pd.read_excel('../Data/Ben_data_import_fixed.xlsx', header=0)
 
 #No_N_imp_practice_Tech = pd.read_excel('../../AMP_No_Nitrogen_import_practice.xlsx','Vol 1 AMP No N. Tech. Reps')
 
-No_N_df = Ben_data_import.loc[:,'Time(days)':'NoN-C.2'] #making a dataframe of just times and the No N data
-
-No_N_data_df = Ben_data_import.loc[:,'NoN-A.1':'NoN-C.2'] #making a dataframe of just the data values  (not time) so I can find an average 
-
-No_N_data_avg_df = No_N_data_df.mean(axis=1) #dataframe of the avereages for the 6 trials 
-
-
-dtimes = array(No_N_df['Time(days)']) #making an array with times in it for easier manipultiaon
-
-mean_data = array(No_N_data_df.mean(axis=1))
-
-print (mean_data, dtimes)
-
-
-
-Ps = mean_data  #Cells per mL of Pro from data array; renaming it Ps
+No_N_A1 = Ben_data_import ['NoN-A.1']      #nameing the technical replicate Producer cell density values as No_N_A1
+No_N_A1 = array((Ben_data_import['NoN-A.1'])) #turining No_N_A1 into an array
+Ps = No_N_A1 #Cells per mL of Pro from data array; renaming it Ps
 Q = (9.5*1.0e-15)*14*1.0e06       #Nitrogen CEll quota from literature (9.5fg/cell)...multiply by molar wieght (14)  and 10^6 to get micrograms
-Rs = r_[[((((max(mean_data))-mean_data[0])*(Q)),0)]] #making an array for Rs values, just the amount of R calculated from taking the peak cell growth and finding change in cell density and finding resource needed for that cell increase based on cell Nitrogen quota
+Rs = r_[[((((max(No_N_A1))-No_N_A1[0])*(Q)),0)]] #making an array for Rs values, just the amount of R calculated from taking the peak cell growth and finding change in cell density and finding resource needed for that cell increase based on cell Nitrogen quota
 
 
 
@@ -58,12 +44,12 @@ Rs = r_[[((((max(mean_data))-mean_data[0])*(Q)),0)]] #making an array for Rs val
 Rsd = np.std(Rs)
 Psd = np.std(Ps)
 
-#go back to find standard deviation and error from the original 6 df columns
 
 
 
-# Times for Phytoplankton and Resource measurements
+# Sample times
 
+dtimes = array(Ben_data_import ['Time(days)'])   #data times; put into an array from time column in dataframe  
 ptimes = dtimes      #data times; put into an array from time column in dataframe  
 rtimes = dtimes[[0,12]]   #r data only at first and last time point so rtiems is just 2 of the positions of dtimes
 #should rtimes be different? should they correspond to the full time series even if we have no resource concentration data points for any of those?  
@@ -158,16 +144,16 @@ params = log(params) # we do the parameter search in log space (I will explain l
 
 npars = params.shape[0] # number of parameters being searched through
 
-
-#mean_data = array(No_N_data_df.mean(axis=1))
-#Ps = mean_data
-#Rs = r_[[((((max(mean_data)) - mean_data[0])*(Q)), mean_data[0]]]
+No_N_A1 = array((Ben_data_import['NoN-A.1']))
+Ps = No_N_A1
+Rs = r_[[((((max(No_N_A1))-No_N_A1[0])*(Q)),0)]]     #should the endpoint be somthing other than 0? 
 
 
 # initial conditions
- 
-inits = r_[[(((max(mean_data))-mean_data[0])*(Q)),mean_data[0]]]     #Initial R = ((P cell density at peak of growth) - (P cell density initital))*Nitrogen Quota for cells from a paper #Initial P is 0 position in P array
-
+  #inits = r_[[Rs, Ps]]
+inits = r_[[(((max(No_N_A1))-No_N_A1[0])*(Q)), No_N_A1[0]]]     #what initial conditions do I put here??? For R and P? 
+#R = 6.9e+6 <--- was a guess...replace with ((P cell density at peak of growth) - (P cell density initital))*Nitrogen Quota for cells from a paper 
+#P = No_N_A1[0]   #makes the starting value of P be the first data point collected for P in Excel data file
 
 mtimes = linspace(0,42.0,int(42.0*24.0))   #put this down here bc you have to graph model R outputs by mtomes to get the model to actually be time resolved on the graph
 
@@ -176,7 +162,7 @@ mtimes = linspace(0,42.0,int(42.0*24.0))   #put this down here bc you have to gr
 
 Rnt,Pnt = integrate(params,inits,rtimes,ptimes,forshow=True)    #shou
 
-chi =   sum((Rnt - Rs) ** 2 / (Rsd ** 2)) +  sum((Pnt - Ps) ** 2 / (Psd ** 2)) 
+#chi =   sum((Rnt - Rs) ** 2 / (Rsd ** 2)) +  sum((Pnt - Ps) ** 2 / (Psd ** 2)) 
 #this is the equation for Error summ of swuares      #how to make chi for my parameters? 
 
 
@@ -216,9 +202,8 @@ show()
 
 
 
-###########################
+
 #distribution arrays and aceptance ratios - these are contaioners to be added to
-##########################
 
 ar = 0.0
 
@@ -228,10 +213,8 @@ alphas, deltas, Vmaxes = r_[[]],r_[[]],r_[[]]
 
 pall = [alphas, deltas, Vmaxes]  #what is pall???  .just 'parameters,all?
 
-##########################
-#now actually do the fitting 
-##########################
 
+#now actually do the fitting 
 
 for it in arange(1,nits,1):  #making an evenly spaces arrangement of values from 1 to nits (number of itterations) on the step scale of 1.  
 
