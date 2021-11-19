@@ -32,16 +32,14 @@ from pylab import *
 
 #Ben_data_import = pd.read_excel('../Data/Ben_data_import_fixed.xlsx', header=0)
 
-df_all = pd.read_csv( "/Users/dkm/Documents/Talmy_research/Zinser_and_Ben/Project_1_nutrient_additions/data/NH4_add.csv")
+df_all = pd.read_csv("/Users/dkm/Documents/Talmy_research/Zinser_and_Ben/Project_1_nutrient_additions/data/NH4_add.csv")
 
 print(df_all)
 
 
 
-df_main = pd.read_csv("/Users/dkm/Documents/Talmy_research/Zinser_and_Ben/Project_6_transfer_datasets/data/Pro_transfer_no_N_fixed.csv")
 
-#print(df_main.loc[time()])
-
+'''
 
 #slicing into arrays since column names aren't callable rn :/ 
 
@@ -80,7 +78,7 @@ plt.yticks(fontsize = 14)
 
 plt.show()
 
-
+'''
 
 
 
