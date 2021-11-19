@@ -37,7 +37,7 @@ df_all = pd.read_csv("/Users/dkm/Documents/Talmy_research/Zinser_and_Ben/Project
 print(df_all)
 
 
-
+short = df_all.truncate(before="id", after="oriSource", axis=1)     #not working right now
 
 '''
 
