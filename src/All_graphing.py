@@ -49,6 +49,18 @@ df_all = df_all.rename({'Time(days)':'times'}, axis=1)    #'renaming column to m
 
 
 
+
+####################################
+
+# Slicing Data
+
+####################################
+
+
+df_big = df_all[df_all["treatment"] > 40 ]
+df_400 = df_all[df_all["treatment"] > 40 & df_all["treatment"] < 40000 ]   #not specific enough? 
+
+
 ######################################
 
 #  Graphing Data 
@@ -67,16 +79,11 @@ plt.scatter(df_all['times'],df_all['rep6'], label = 'rep6')
 
 
 #df_40 = df_all.loc[(df_all['treatment'] == "40.0"),::]    #not working 
+#df_4 = df_all.loc[(df_all['treatment'] == 4.0)]    #only getting column names, no rows of data
 
 
-'''
-
-time = df_main.iloc[:,1]
-rep1 = df_main.iloc[:,2]
-rep2 = df_main.iloc[:,3]
 
 plt.semilogy()
-'''
 
 plt.legend()
 plt.title('NH4 additions to MIT9215 Pro', fontsize = '22')
