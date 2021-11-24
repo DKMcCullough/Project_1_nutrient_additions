@@ -36,8 +36,21 @@ df_all = pd.read_csv("/Users/dkm/Documents/Talmy_research/Zinser_and_Ben/Project
 
 print(df_all)
 
+df_all['rep1'] = df_all['rep1'].fillna(value = 0.0) #filling Nans with 09.0 in 'rep1' column 
+df_all['rep2'] = df_all['rep2'].fillna(value = 0.0 )#filling Nans with 09.0 in 'rep2' column 
 
-short = df_all.truncate(before="id", after="oriSource", axis=1)     #not working right now
+
+
+df_all = df_all.dropna(axis = 1)     #taking NaN columns off the end of df but had to fill rep 1 and 2 Nans first
+
+print(df_all)
+
+
+
+
+
+
+
 
 '''
 
