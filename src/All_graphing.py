@@ -80,7 +80,6 @@ avg_400000 = df_400000[rep_cols].mean(axis=1)
 
 
 
-
 ######################################
 
 #  Graphing Data                 
@@ -107,7 +106,7 @@ plt.scatter(x = df_4000['times'], y = [avg_4000], label = '4000 NH4 added')
 plt.scatter(x = df_40000['times'], y = [avg_40000], label = '40000 NH4 added')
 plt.scatter(x = df_400000['times'], y = [avg_400000], label = '4000000 NH4 added')
 
-
+#plt.errorbar(x = df_0['times'], y = [avg_0], yerr = 'df_0[reps_cols].std(axis=1)')    #trying to get error bars to print on graph
 
 plt.semilogy()
 
@@ -126,6 +125,6 @@ plt.show()
 
 
 
-
+print("Done") 
 
 
