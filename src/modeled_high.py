@@ -174,6 +174,11 @@ plt.ylabel('number of cells')
 plt.show()
 
 
+print('k1')
+print(k1)
+print('k2')
+print(k2) 
+
 
 
 print("Done")
