@@ -1,6 +1,6 @@
 '''
 
-name:   modeled_high.py 
+name:   modeled_low.py 
 
 location: /Users/dkm/Documents/Talmy_research/Zinser_and_Ben/Project_1_nutrient_additions/src
 
@@ -49,40 +49,13 @@ df_all = df_all.rename({'Time(days)':'times'}, axis=1)    #'renaming column to m
 
 #print(df_all['treatment'].value_counts())   #finding how many uniquie counts (different treatments) there are and the number of each
 
-df_400000 = df_all[df_all["treatment"].isin([400000])]
+df_40 = df_all[df_all["treatment"].isin([40])]
 
 
 
 rep_cols = ['rep1', 'rep2', 'rep3', 'rep4', 'rep5', 'rep6']     # columns of just replicate assay abundance values
-avg_400000 = df_400000[rep_cols].mean(axis=1) #takes mena value across rep1-6 column first each row 
+avg_40 = df_40[rep_cols].mean(axis=1) #takes mena value across rep1-6 column first each row 
 
-
-######################################
-
-#  Graphing Data                 
-
-#####################################
-'''
-
-fig , ax = plt.subplots(sharex=True, sharey=True) 
-plt.scatter(x = df_400000['times'], y = [avg_400000], label = '400000 NH4 added')
-
-#plt.errorbar(x = df_0['times'], y = [avg_0], yerr = 'df_0[reps_cols].std(axis=1)')    #trying to get error bars to print on graph
-
-plt.semilogy()
-
-plt.legend()
-plt.title('Replete N for MIT9215 Pro', fontsize = '22')
-plt.xlabel('Time',fontsize = '18')
-plt.legend(prop={"size":14})
-plt.ylabel('Cell Abundance (cell/ml)',fontsize = '18')
-plt.xticks(fontsize = 14) 
-plt.yticks(fontsize = 14)
-
-
-
-#plt.show()
-'''
 
 ##################################
 
@@ -120,8 +93,8 @@ times = np.linspace(0,ndays,int(ndays/step))
 ##################################
 
 P = 1e4
-S = 2e8 
-k1= 0.00000006
+S = 7e6 
+k1= 0.00000078
 
 k2 = 0.6       # seems to control steepness of slope
 
@@ -157,7 +130,7 @@ for t in times:
 fig, (ax1, ax2) = plt.subplots(1, 2)
 fig.suptitle('N and P during NH addition trials')
 ax1.plot(times,PsEuler, label = "Prochlorococcus Biomass over time")
-ax1.plot(df_400000['times'],avg_400000,linestyle = 'None',  marker='o', label = '400000 NH4 added')
+ax1.plot(df_40['times'],avg_40,linestyle = 'None',  marker='o', label = '40 NH4 added')
 ax1.set(xlabel='Time (day $^(-1)$', ylabel='number of cells(10^_)')
 ax2.plot(times, SsEuler, label = "Nutrient Concentration over time")
 ax2.set(xlabel='Time (day $^(-1)$', ylabel='Nutrient concentration(10^_)')
