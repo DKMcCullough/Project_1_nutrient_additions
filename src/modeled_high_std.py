@@ -54,7 +54,7 @@ df_400000 = df_all[df_all["treatment"].isin([400000])]
 
 
 rep_cols = ['rep1', 'rep2', 'rep3', 'rep4', 'rep5', 'rep6']     # columns of just replicate assay abundance values
-avg_400000 = df_400000[rep_cols].mean(axis=1) #takes mena value across rep1-6 column first each row 
+avg_400000 = df_400000[rep_cols].mean(axis=1) #takes mean value across rep1-6 column for each row 
 
 
 ######################################
@@ -66,6 +66,7 @@ avg_400000 = df_400000[rep_cols].mean(axis=1) #takes mena value across rep1-6 co
 
 fig , ax = plt.subplots(sharex=True, sharey=True) 
 plt.scatter(x = df_400000['times'], y = [avg_400000], label = '400000 NH4 added')
+yerr = df_400000[rep_cols].std(axis=1)
 
 #plt.errorbar(x = df_0['times'], y = [avg_0], yerr = 'df_0[reps_cols].std(axis=1)')    #trying to get error bars to print on graph
 
