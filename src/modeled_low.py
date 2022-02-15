@@ -98,27 +98,29 @@ k1= 0.00000078
 
 k2 = 0.6       # seems to control steepness of slope
 
+nrdelta = 0.02    #nutrient replete delta
+nddelta = 0.1    #nutrient deplete delta
 
-SsEuler = np.array([])
-PsEuler = np.array([])
-
+SsEuler40 = np.array([])
+PsEuler40 = np.array([])
 
 for t in times:
-        PsEuler = np.append(PsEuler,P)
-        SsEuler = np.append(SsEuler,S)
-        dPdt = k2 * P * S /( (k2/k1) + S)
+        PsEuler40 = np.append(PsEuler40,P)
+        SsEuler40 = np.append(SsEuler40,S)
+        if (S>1e-4):
+            delta = nrdelta
+        else:
+            delta = nddelta
+        dPdt = k2 * P * S /( (k2/k1) + S) - delta*P
         dSdt =-P*( k2*S)/((k2/k1)+S)
         if S+dSdt*step <0:                    #making sure S isnt taken negative and therefore causing issues when we log transform the data
                 S = 0.00000000000000000004
         else:
                 S = S + dSdt*step
         P = P + dPdt*step
-                #S = S + dSdt*step
-        #print( dPdt,t,P)
-        #print(np.log(dSdt), t, S)
-        #print(' \n')
-
-
+              
+        
+        
 
 #####################################
 
@@ -129,10 +131,10 @@ for t in times:
 
 fig, (ax1, ax2) = plt.subplots(1, 2)
 fig.suptitle('N and P during NH addition trials')
-ax1.plot(times,PsEuler, label = "Prochlorococcus Biomass over time")
+ax1.plot(times,PsEuler40, label = "Prochlorococcus Biomass over time")
 ax1.plot(df_40['times'],avg_40,linestyle = 'None',  marker='o', label = '40 NH4 added')
 ax1.set(xlabel='Time (day $^(-1)$', ylabel='number of cells(10^_)')
-ax2.plot(times, SsEuler, label = "Nutrient Concentration over time")
+ax2.plot(times, SsEuler40, label = "Nutrient Concentration over time")
 ax2.set(xlabel='Time (day $^(-1)$', ylabel='Nutrient concentration(10^_)')
 
 ax1.semilogy()

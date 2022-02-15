@@ -55,7 +55,7 @@ df_400000 = df_all[df_all["treatment"].isin([400000])]
 
 rep_cols = ['rep1', 'rep2', 'rep3', 'rep4', 'rep5', 'rep6']     # columns of just replicate assay abundance values
 avg_400000 = df_400000[rep_cols].mean(axis=1) #takes mean value across rep1-6 column for each row 
-
+yerr = df_400000[rep_cols].std(axis=1)
 
 ######################################
 
@@ -155,24 +155,29 @@ for t in times:
 #####################################
 
 
-fig, (ax1, ax2) = plt.subplots(1, 2)
-fig.suptitle('N and P during NH addition trials')
-ax1.plot(times,PsEuler, label = "Prochlorococcus Biomass over time")
-ax1.plot(df_400000['times'],avg_400000,linestyle = 'None',  marker='o', label = '400000 NH4 added')
-ax1.set(xlabel='Time (day $^(-1)$', ylabel='number of cells(10^_)')
-ax2.plot(times, SsEuler, label = "Nutrient Concentration over time")
-ax2.set(xlabel='Time (day $^(-1)$', ylabel='Nutrient concentration(10^_)')
+fig1, (ax1, ax2) = plt.subplots(1, 2, figsize=(12,7))
+fig1.suptitle('400000 NH4 trial modeled data', fontweight='bold', fontsize=25)
+
+#cell abundance subplot
+ax1.plot(times,PsEuler, color = 'purple', label = "modeled Pro abundance, high N") #plotting model on same ax plot as data
+ax1.plot(df_400000['times'],avg_400000,linestyle = 'None',  marker='o', color = 'green' , label = ' + 400000 NH4 treatment') #plotting data on ax 1 of fig1
+ax1.errorbar(df_400000['times'], avg_400000, yerr=yerr,fmt='none', color = 'green' ) #error bars for avg400000 data. yerr
+ax1.set(xlabel='Time (day $^-1$)', ylabel='number of cells(10^_)')
+ax1.set_title('Prochlorococcus Biomass over time', fontsize=20)
+ax1.legend(loc='lower right', fontsize=12)
+   
+#nutrient subplot
+ax2.plot(times, SsEuler, color = 'purple', label = "high N model")
+ax2.set(xlabel='Time (day $^-1)$', ylabel='Nutrient concentration(10^_)')
+ax2.set_title('NH4 concentrations over time',fontsize=20)
+ax2.legend(loc='lower left', fontsize=12)
 
 ax1.semilogy()
 ax2.semilogy()
-'''
-plt.plot(times, PsEuler,label = "Phytoplankton Biomass")
-plt.xlabel('Time (day $^{-1}$)') 
-plt.ylabel('number of cells')
 
-'''
 
 plt.show()
+
 
 
 print('k1')
