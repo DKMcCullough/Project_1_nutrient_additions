@@ -352,7 +352,7 @@ ax1.errorbar(df_400000['times'], avg_400000, yerr=yerr_400000,fmt='none', color 
 
 
 
-ax1.set(xlabel='Time (day $^-1$)', ylabel='number of cells(10^_)')
+ax1.set(xlabel='Time (day $^-1$)', ylabel='number of cells (10^_)')
 ax1.set_title('Prochlorococcus Biomass over time', fontsize=20)
 #ax1.legend(loc='lower right', fontsize=12)
    
@@ -373,20 +373,30 @@ ax2.set(xlabel='Time (day $^-1)$', ylabel='Nutrient concentration(10^_)')
 ax2.set_title('NH4 concentrations over time',fontsize=20)
 #ax2.legend(loc='lower left', fontsize=12)
 
-'''
-plt.legend()
-plt.title('NH4 additions to MIT9215 Pro', fontsize = '22')
-plt.xlabel('Time',fontsize = '18')
-plt.legend(prop={"size":14})
-plt.ylabel('Cell Abundance (flow)',fontsize = '18')
-plt.xticks(fontsize = 14) 
-plt.yticks(fontsize = 14)
-
-'''
 
 
+#plt.legend(prop={"size":14})
+
+plt.xticks(fontsize = 16) 
+plt.yticks(fontsize = 16)
+
+#plt.add_subplot(3,1,1)   
 
 
 plt.show()
 
 
+
+
+#To do 
+'''
+
+array of times, data/model, error array name, label for each treatment.
+Then we can use treatment array to have all graphing things and can run a loop.  
+Run treatment array through slicing if loop to cleam up code.
+Individual plots for each treatment with printout of parameters as a sub subplot? 
+
+
+
+
+'''
