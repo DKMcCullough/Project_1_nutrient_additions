@@ -182,13 +182,13 @@ for t in times:
 #400
 
 P = 1e4
-S = (4e2 + 5.0e6)   #4e2 is the added NH4 in the treatment
+S = (4.0e2 + 5.8e6)   #4e2 is the added NH4 in the treatment
 k1= 2.5e-7
 
-k2 = 1.1      # seems to control steepness of slope
+k2 = 1.0      # seems to control steepness of slope
 
-nrdelta = 0.04    #nutrient replete delta
-nddelta = 0.27    #nutrient deplete delta
+nrdelta = 0.05    #nutrient replete delta
+nddelta = 0.24    #nutrient deplete delta
 
 
 SsEuler400 = np.array([])
@@ -215,13 +215,13 @@ for t in times:
 #4000
 
 P = 1e4
-S = ( 4e3 + 1.2e7)      #4e3 is the added treatement
-k1= 4.3e-7
+S = (4.0e3 + 6.8e6)      #4e3 is the added treatement
+k1= 2.3e-7
 
-k2 = 0.68       # seems to control steepness of slope
+k2 = 1.1       # seems to control steepness of slope
 
-nrdelta = 0.04    #nutrient replete delta
-nddelta = 3    #nutrient deplete delta
+nrdelta = 0.045    #nutrient replete delta
+nddelta = 0.3    #nutrient deplete delta
 
 
 SsEuler4000 = np.array([])
@@ -355,6 +355,7 @@ ax1.errorbar(df_4000['times'], avg_4000, yerr=yerr_4000,fmt='none', color = 'c' 
 ax1.set(xlabel='Time (day $^-1$)', ylabel='number of cells (10^_)')
 ax1.set_title('Prochlorococcus Biomass over time', fontsize=20)
 ax1.legend(loc='lower right', fontsize=12)
+
    
 #nutrient subplot
 #ax2.plot(times,SsEuler0,color = 'm' , label  = 'zero NH4 added')
@@ -379,6 +380,7 @@ ax2.legend(loc='upper right', fontsize=12)
 
 plt.xticks(fontsize = 16)
 plt.yticks(fontsize = 16)
+#plt.tick_params(axis='both', which = 'both', length = 2,  labelsize=16,)
 
 #plt.add_subplot(3,1,1)
 
