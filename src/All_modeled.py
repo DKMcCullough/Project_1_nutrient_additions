@@ -96,7 +96,7 @@ P = 1e4
 
 ################################
 
-
+'''
 #dPdt = (max growth rate)(nutient concentration)/michelis-mention constant) + (nutrinet concentration) (Population size) 
 #dSdt = (Supply of nutriet) - (max growth rate)(nutient concentration)/michelis-mention constant) + (nutrinet concentration)
 
@@ -104,7 +104,7 @@ P = 1e4
 #dSdt =  -P*( k2*S)/((k2/k1)+S)
 
 #nutrient replete or deplete delta dependant on if S ~ 0.0
-
+'''
 
 ##################################
 
@@ -183,12 +183,12 @@ for t in times:
 
 P = 1e4
 S = (4.0e2 + 5.8e6)   #4e2 is the added NH4 in the treatment
-k1= 2.5e-7
+k1= 2.0e-7
 
-k2 = 1.0      # seems to control steepness of slope
+k2 = 1.1      # seems to control steepness of slope
 
-nrdelta = 0.05    #nutrient replete delta
-nddelta = 0.24    #nutrient deplete delta
+nrdelta = 0.03     #nutrient replete delta
+nddelta = 0.19    #nutrient deplete delta
 
 
 SsEuler400 = np.array([])
@@ -215,13 +215,13 @@ for t in times:
 #4000
 
 P = 1e4
-S = (4.0e3 + 6.8e6)      #4e3 is the added treatement
-k1= 2.3e-7
+S = (4.0e3 + 1.3e7)      #4e3 is the added treatement
+k1= 2.0e-7
 
-k2 = 1.1       # seems to control steepness of slope
+k2 = 0.9         # seems to control steepness of slope
 
-nrdelta = 0.045    #nutrient replete delta
-nddelta = 0.3    #nutrient deplete delta
+nrdelta = 0.06    #nutrient replete delta
+nddelta = 0.23    #nutrient deplete delta
 
 
 SsEuler4000 = np.array([])
@@ -342,6 +342,7 @@ ax1.plot(df_400['times'], avg_400, linestyle = 'None',  marker='o', color = 'gre
 ax1.plot(df_4000['times'], avg_4000, linestyle = 'None',  marker='o', color = 'c' , label = ' + 4000 NH4 added treatment')
 #ax1.plot(df_40000['times'], avg_40000, linestyle = 'None',  marker='o', color = 'b' , label = ' + 40000 NH4 treatment')
 #ax1.plot(df_400000['times'], avg_400000, linestyle = 'None',  marker='o', color = 'k' , label = ' + 400000 NH4 treatment')
+
 #errorbars
 #ax1.errorbar(df_0['times'], avg_0, yerr=yerr_0,fmt='none', color = 'm')
 #ax1.errorbar(df_40['times'], avg_40, yerr=yerr_40,fmt='none', color = 'r')
@@ -394,8 +395,11 @@ plt.show()
 '''
 
 array of times, data/model, error array name, label for each treatment.
+
 Then we can use treatment array to have all graphing things and can run a loop.  
+
 Run treatment array through slicing if loop to cleam up code.
+
 Individual plots for each treatment with printout of parameters as a sub subplot? 
 
 
