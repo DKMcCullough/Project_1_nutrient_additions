@@ -51,6 +51,17 @@ df_all = df_all.rename({'Time(days)':'times'}, axis=1)    #'renaming column to m
 #print(df_all['treatment'].value_counts())   #finding how many uniquie counts (different treatments) there are and the number of each
 
 treatments = [0,40,400,4000,40000,400000]  
+
+#dfs = pd.DataFrame(index = treatments) # making treatments the index for data
+#print(dfs)
+
+for i in treatments:
+    df_i = df_all[df_all["treatment"].isin([i])]
+    #dfs = np.append(dfs,df_i)
+    print(df_i)
+
+df_0 = df_all[df_all.treatment == 0].copy
+
     
 df_0 = df_all[df_all["treatment"].isin([0])]
 df_40 = df_all[df_all["treatment"].isin([40])]
@@ -69,6 +80,12 @@ avg_40000 = df_40000[rep_cols].mean(axis=1)
 avg_400000 = df_400000[rep_cols].mean(axis=1) 
 
 
+yerrs = r_[[]]
+for i in treatments:
+    yerr_i = df_i[rep_cols].std(axis=1)
+    concatenate(r_[[yerrs]])  
+    print(yerrs)
+    '''
 yerr_0 = df_0[rep_cols].std(axis=1)
 yerr_40 = df_40[rep_cols].std(axis=1)
 yerr_400 = df_400[rep_cols].std(axis=1)
@@ -76,7 +93,7 @@ yerr_4000 = df_4000[rep_cols].std(axis=1)
 yerr_40000 = df_40000[rep_cols].std(axis=1)
 yerr_400000 = df_400000[rep_cols].std(axis=1)
 
-
+'''
 
 ##################################
 
