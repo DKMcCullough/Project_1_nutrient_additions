@@ -116,13 +116,13 @@ P = 1e4
 #0 NH4 added
 
 P = 1e4
-S = (0 + 1e6)    #    treatment to add in this case is 0
-k1= 8e-7
+S = (0.0 + 4.5e6)    #    treatment to add in this case is 0
+k1= 2.8e-7
 
-k2 = 0.6      # seems to control steepness of slope
+k2 = 1.1       # seems to control steepness of slope
 
-nrdelta = 0.002    #nutrient replete delta
-nddelta = 0.01    #nutrient deplete delta
+nrdelta = 0.03      #nutrient replete delta
+nddelta = 0.1       #nutrient deplete delta
 
 
 SsEuler0 = np.array([])
@@ -148,13 +148,13 @@ for t in times:
 #40 
 
 P = 1e4
-S = (40 +2e6) 
-k1= 8e-6
+S = (40 + 5.7e6) 
+k1= 2.2e-7
 
-k2 = 0.6      # seems to control steepness of slope
+k2 = 1.2       # seems to control steepness of slope
 
-nrdelta = 0.002    #nutrient replete delta
-nddelta = 0.08   #nutrient deplete delta
+nrdelta = 0.039    #nutrient replete delta
+nddelta = 0.14   #nutrient deplete delta
 
 
 SsEuler40 = np.array([])
@@ -251,13 +251,13 @@ for t in times:
 #40000
 
 P = 1e4
-S = (4e4 + 2e3)#2e7 would be correct for assay set up
-k1= 5e-7
+S = (4e4 + 1.1e8)#2e7 would be correct for assay set up
+k1= 2.9e-7
 
-k2 = 0.6      # seems to control steepness of slope
+k2 = 0.62      # seems to control steepness of slope
 
-nrdelta = 0.002    #nutrient replete delta
-nddelta = 0.2    #nutrient deplete delta
+nrdelta = 0.05    #nutrient replete delta
+nddelta = 0.4    #nutrient deplete delta
 
 
 SsEuler40000 = np.array([])
@@ -284,12 +284,12 @@ for t in times:
 #400000
 
 P = 1e4
-S = (4e5+ 2e3) 
-k1= 8e-8
+S = (4e5 + 1.8e8) 
+k1= 2.2e-7
 
-k2 = 0.6      # seems to control steepness of slope
+k2 = 0.55      # seems to control steepness of slope
 
-nrdelta = 0.002    #nutrient replete delta
+nrdelta = 0.007    #nutrient replete delta
 nddelta = 0.01    #nutrient deplete delta
 
 
@@ -328,43 +328,43 @@ fig1.suptitle('NH4 trials modeled with data', fontweight='bold', fontsize=25)
 
 #cell abundance subplot
 #model
-#ax1.plot(times,PsEuler0,color = 'm' , label  = 'zero NH4 added')
-#ax1.plot(times,PsEuler40,color = 'r' , label = ' + 40 NH4 treatment')
+ax1.plot(times,PsEuler0,color = 'm' , label  = 'zero NH4 added')
+ax1.plot(times,PsEuler40,color = 'r' , label = ' + 40 NH4 treatment')
 ax1.plot(times,PsEuler400,color = 'green' , label = ' + 400 NH4 treatment')
 ax1.plot(times,PsEuler4000, color = 'c', label = ' + 4000 NH4 added treatment')
-#ax1.plot(times,PsEuler40000, color = 'b' , label = ' + 40000 NH4 treatment')
-#ax1.plot(times,PsEuler400000 , color = 'k' , label = ' + 400000 NH4 treatment')
+ax1.plot(times,PsEuler40000, color = 'b' , label = ' + 40000 NH4 treatment')
+ax1.plot(times,PsEuler400000 , color = 'k' , label = ' + 400000 NH4 treatment')
 
 #data
-#ax1.plot(df_0['times'], avg_0, linestyle = 'None',  marker='o', color = 'm' , label  = 'zero NH4 added')
-#ax1.plot(df_40['times'], avg_40, linestyle = 'None',  marker='o', color = 'r' , label = ' + 40 NH4 treatment')
-ax1.plot(df_400['times'], avg_400, linestyle = 'None',  marker='o', color = 'green' , label = ' + 400 NH4 treatment')
-ax1.plot(df_4000['times'], avg_4000, linestyle = 'None',  marker='o', color = 'c' , label = ' + 4000 NH4 added treatment')
-#ax1.plot(df_40000['times'], avg_40000, linestyle = 'None',  marker='o', color = 'b' , label = ' + 40000 NH4 treatment')
-#ax1.plot(df_400000['times'], avg_400000, linestyle = 'None',  marker='o', color = 'k' , label = ' + 400000 NH4 treatment')
+ax1.plot(df_0['times'], avg_0, linestyle = 'None',  marker='o', color = 'm' )  #, label  = 'zero NH4 added')
+ax1.plot(df_40['times'], avg_40, linestyle = 'None',  marker='o', color = 'r' )  #, label = ' + 40 NH4 treatment')
+ax1.plot(df_400['times'], avg_400, linestyle = 'None',  marker='o', color = 'green' )  #, label = ' + 400 NH4 treatment')
+ax1.plot(df_4000['times'], avg_4000, linestyle = 'None',  marker='o', color = 'c' )      #, label = ' + 4000 NH4 added treatment')
+ax1.plot(df_40000['times'], avg_40000, linestyle = 'None',  marker='o', color = 'b' )   #label = ' + 40000 NH4 treatment')
+ax1.plot(df_400000['times'], avg_400000, linestyle = 'None',  marker='o', color = 'k' )  #, label = ' + 400000 NH4 treatment')
 
 #errorbars
-#ax1.errorbar(df_0['times'], avg_0, yerr=yerr_0,fmt='none', color = 'm')
-#ax1.errorbar(df_40['times'], avg_40, yerr=yerr_40,fmt='none', color = 'r')
+ax1.errorbar(df_0['times'], avg_0, yerr=yerr_0,fmt='none', color = 'm')
+ax1.errorbar(df_40['times'], avg_40, yerr=yerr_40,fmt='none', color = 'r')
 ax1.errorbar(df_400['times'], avg_400,yerr=yerr_400,fmt='none', color = 'green' )
 ax1.errorbar(df_4000['times'], avg_4000, yerr=yerr_4000,fmt='none', color = 'c' )
-#ax1.errorbar(df_40000['times'], avg_40000, yerr=yerr_40000,fmt='none', color = 'b')
-#ax1.errorbar(df_400000['times'], avg_400000, yerr=yerr_400000,fmt='none', color = 'k' )
+ax1.errorbar(df_40000['times'], avg_40000, yerr=yerr_40000,fmt='none', color = 'b')
+ax1.errorbar(df_400000['times'], avg_400000, yerr=yerr_400000,fmt='none', color = 'k' )
 
 
 
 ax1.set(xlabel='Time (day $^-1$)', ylabel='number of cells (10^_)')
 ax1.set_title('Prochlorococcus Biomass over time', fontsize=20)
-ax1.legend(loc='lower right', fontsize=12)
+ax1.legend(loc='lower right',prop={'size': 10}, fontsize=12)
 
    
 #nutrient subplot
-#ax2.plot(times,SsEuler0,color = 'm' , label  = 'zero NH4 added')
-#ax2.plot(times,SsEuler40,color = 'r' , label = ' + 40 NH4 treatment')
+ax2.plot(times,SsEuler0,color = 'm' , label  = 'zero NH4 added')
+ax2.plot(times,SsEuler40,color = 'r' , label = ' + 40 NH4 treatment')
 ax2.plot(times,SsEuler400,color = 'green' , label = ' + 400 NH4 treatment')
 ax2.plot(times,SsEuler4000, color = 'c' , label = ' + 4000 NH4 added treatment')
-#ax2.plot(times,SsEuler40000, color = 'b' , label = ' + 40000 NH4 treatment')
-#ax2.plot(times,SsEuler400000 , color = 'k' , label = ' + 400000 NH4 treatment')
+ax2.plot(times,SsEuler40000, color = 'b' , label = ' + 40000 NH4 treatment')
+ax2.plot(times,SsEuler400000 , color = 'k' , label = ' + 400000 NH4 treatment')
 
 
 ax1.semilogy()
@@ -373,17 +373,17 @@ ax2.semilogy()
 
 ax2.set(xlabel='Time (day $^-1)$', ylabel='Nutrient concentration(10^_)')
 ax2.set_title('NH4 concentrations over time',fontsize=20)
-ax2.legend(loc='upper right', fontsize=12)
+ax2.legend(loc='lower left',prop={'size': 10}, fontsize=12)
 
 
 
 #plt.legend(prop={"size":14})
 
-plt.xticks(fontsize = 16)
+plt.xticks(fontsize = 20)
 plt.yticks(fontsize = 16)
 #plt.tick_params(axis='both', which = 'both', length = 2,  labelsize=16,)
 
-#plt.add_subplot(3,1,1)
+
 
 
 plt.show()
