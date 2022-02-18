@@ -52,24 +52,29 @@ df_all = df_all.rename({'Time(days)':'times'}, axis=1)    #'renaming column to m
 
 treatments = [0,40,400,4000,40000,400000]  
 
-#dfs = pd.DataFrame(index = treatments) # making treatments the index for data
-#print(dfs)
+dfs = pd.DataFrame(index = treatments) # making treatments the index for data
+#dfs = r_[[]]   #numpy array 
 
 for i in treatments:
     df_i = df_all[df_all["treatment"].isin([i])]
-    #dfs = np.append(dfs,df_i)
-    print(df_i)
-
-df_0 = df_all[df_all.treatment == 0].copy
-
+    dfs = pd.concat((dfs, df_i), axis=0) #TRYING TO save dfs. Currently NOT working
+    print(dfs)
     
+
+
+#df_i = pd.concat([df_all.loc[df_all['treatment'] == i] for i in treatments])
+#df_0,40,etc not saving at end of each loop. Need to save in array of dfs? 
+
+#df_0 = df_all[df_all.treatment == 0].copy
+
+'''   
 df_0 = df_all[df_all["treatment"].isin([0])]
 df_40 = df_all[df_all["treatment"].isin([40])]
 df_400 = df_all[df_all["treatment"].isin([400])]
 df_4000 = df_all[df_all["treatment"].isin([4000])]
 df_40000 =  df_all[df_all["treatment"].isin([40000])]
 df_400000 = df_all[df_all["treatment"].isin([400000])]
-
+'''
 
 rep_cols = ['rep1', 'rep2', 'rep3', 'rep4', 'rep5', 'rep6']     # columns of just replicate assay abundance values
 avg_0 = df_0[rep_cols].mean(axis=1) #takes mena value across rep1-6 column for each row
