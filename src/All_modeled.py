@@ -52,14 +52,31 @@ df_all = df_all.rename({'Time(days)':'times'}, axis=1)    #'renaming column to m
 
 treatments = [0,40,400,4000,40000,400000]  
 
+names = ()     #name of dfs
 dfs = pd.DataFrame(index = treatments) # making treatments the index for data
-#dfs = r_[[]]   #numpy array 
+dc = dict()
+#dfs = np.array([])   #numpy array 
 
 for i in treatments:
     df_i = df_all[df_all["treatment"].isin([i])]
-    dfs = pd.concat((dfs, df_i), axis=0) #TRYING TO save dfs. Currently NOT working
-    print(dfs)
-    
+    name = ('df_' + str(i))
+    dc.update({name : df_i})
+    #names = append(names,name)
+    #save name and PD as  tupel? 
+    #dfs = pd.concat((dfs, df_i), axis=0) #TRYING TO save dfs. Currently NOT working #Not useful to concatenate. Want to make sub-dfs with names each. Thats all :/ 
+    print(dc)
+
+
+
+
+
+
+
+#want to connect names list and dataframe with correct info together. 
+
+
+
+
 
 
 #df_i = pd.concat([df_all.loc[df_all['treatment'] == i] for i in treatments])
