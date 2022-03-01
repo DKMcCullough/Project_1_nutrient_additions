@@ -57,33 +57,30 @@ dc = dict()
 for i in treatments:
     df_i = df_all[df_all["treatment"].isin([i])]
     name = ('df_' + str(i))
-    dc.update({name : df_i})
-    #names = append(names,name)
-    #save name and PD as  tupel? 
-    #dfs = pd.concat((dfs, df_i), axis=0) #TRYING TO save dfs. Currently NOT working #Not useful to concatenate. Want to make sub-dfs with names each. Thats all :/ 
+    dc.update({name : df_i})  #update dictionary of dfs with each loop itteration. 
     print(dc)
 
 
+avgs = dict()
 
-#want to connect names list and dataframe with correct info together. 
-
-
-#df_i = pd.concat([df_all.loc[df_all['treatment'] == i] for i in treatments])
-#df_0,40,etc not saving at end of each loop. Need to save in array of dfs? 
-
-#df_0 = df_all[df_all.treatment == 0].copy
-
-'''   
-df_0 = df_all[df_all["treatment"].isin([0])]
-df_40 = df_all[df_all["treatment"].isin([40])]
-df_400 = df_all[df_all["treatment"].isin([400])]
-df_4000 = df_all[df_all["treatment"].isin([4000])]
-df_40000 =  df_all[df_all["treatment"].isin([40000])]
-df_400000 = df_all[df_all["treatment"].isin([400000])]
+for i in dc :
+    print(i, dc[i])
+    df_i = dc[i]
+    #print(type(df_i))
+    rep_cols = df_i[['rep1', 'rep2', 'rep3', 'rep4', 'rep5', 'rep6']]
+    #df_i.filter(like = 'rep')
+    #print(rep_cols)
+    avg_i = df_i[rep_cols].mean(axis=1)
+    avgs=  avgs.update({i : avg_i})
+    print(avgs)
+    
+    
+    
+    
 '''
 
 rep_cols = ['rep1', 'rep2', 'rep3', 'rep4', 'rep5', 'rep6']     # columns of just replicate assay abundance values
-avg_0 = df_0[rep_cols].mean(axis=1) #takes mena value across rep1-6 column for each row
+avg_0 = df_0[rep_cols].mean(axis=1) #takes mean value across rep1-6 column for each row
 avg_40 = df_40[rep_cols].mean(axis=1)
 avg_400 = df_400[rep_cols].mean(axis=1)
 avg_4000 = df_4000[rep_cols].mean(axis=1)
