@@ -31,16 +31,13 @@ from pylab import *
 
 
 df_all = pd.read_csv("/Users/dkm/Documents/Talmy_research/Zinser_and_Ben/Project_1_nutrient_additions/data/NH4_add.csv")
-df_all['rep1'] = df_all['rep1'].fillna(value = 0.0) #filling Nans with 09.0 in 'rep1' column 
-df_all['rep2'] = df_all['rep2'].fillna(value = 0.0 )#filling Nans with 09.0 in 'rep2' column 
+df_all['rep1'] = df_all['rep1'].fillna(value = 0.0) #filling Nans with 0.0 in 'rep1' column 
+df_all['rep2'] = df_all['rep2'].fillna(value = 0.0 )#filling Nans with 0.0 in 'rep2' column 
 df_all = df_all.dropna(axis = 1)     #taking NaN columns off the end of df but had to fill rep 1 and 2 Nans first
 
 #print(df_all)
 
 df_all = df_all.rename({'Time(days)':'times'}, axis=1)    #'renaming column to make it callable by 'times'
-
-
-
 
 ####################################
 
@@ -68,15 +65,7 @@ for i in treatments:
 
 
 
-
-
-
-
 #want to connect names list and dataframe with correct info together. 
-
-
-
-
 
 
 #df_i = pd.concat([df_all.loc[df_all['treatment'] == i] for i in treatments])
@@ -123,9 +112,10 @@ yerr_400000 = df_400000[rep_cols].std(axis=1)
 
 #################################
 
-step = 1
+step = 0.5
 ndays = 37
 times = np.linspace(0,ndays,int(ndays/step))
+Qn = (9.4e-15*14.0*1e+6)  #Nitrogen Quota for Pro from Bertillison? 
 
 P = 1e4
 ################################
@@ -137,10 +127,10 @@ P = 1e4
 
 '''
 #dPdt = (max growth rate)(nutient concentration)/michelis-mention constant) + (nutrinet concentration) (Population size) 
-#dSdt = (Supply of nutriet) - (max growth rate)(nutient concentration)/michelis-mention constant) + (nutrinet concentration)
+#dSdt = (Supply of nutrientt) - (max growth rate)(nutient concentration)/michelis-mention constant) + (nutrinet concentration)*Cell quota
 
-#dPdt = k2 * P * S /( (k2/k1) + S)    - delta*P     # k2 = Vmax  K1 = affinity for nutirent (alpha) 
-#dSdt =  -P*( k2*S)/((k2/k1)+S)
+#dPdt = k2 * P * S /( (k2/k1) + S)    - delta*P     # k2 = Vmax  K1 = affinity for nutirent (alpha)  
+#dSdt =  -P*( k2*S)/((k2/k1)+S)*Qn
 
 #nutrient replete or deplete delta dependant on if S ~ 0.0
 '''
