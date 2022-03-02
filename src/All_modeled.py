@@ -35,7 +35,7 @@ df_all['rep1'] = df_all['rep1'].fillna(value = 0.0) #filling Nans with 0.0 in 'r
 df_all['rep2'] = df_all['rep2'].fillna(value = 0.0 )#filling Nans with 0.0 in 'rep2' column 
 df_all = df_all.dropna(axis = 1)     #taking NaN columns off the end of df but had to fill rep 1 and 2 Nans first
 
-#print(df_all)
+#make a for loop to fill all nans for all lines with 'rep' in them
 
 df_all = df_all.rename({'Time(days)':'times'}, axis=1)    #'renaming column to make it callable by 'times'
 
@@ -45,64 +45,37 @@ df_all = df_all.rename({'Time(days)':'times'}, axis=1)    #'renaming column to m
 
 ####################################
 
-#print(df_all['treatment'].value_counts())   #finding how many uniquie counts (different treatments) there are and the number of each
 
 treatments = [0,40,400,4000,40000,400000]  
 
-names = ()     #name of dfs
-dfs = pd.DataFrame(index = treatments) # making treatments the index for data
-dc = dict()
-#dfs = np.array([])   #numpy array 
+#names = ()     #name of dfs
+#dfs = pd.DataFrame(index = treatments) # making treatments the index for data
 
+dc = dict()
+
+####slicing df into treatments and saving into dictionary (dc)######
 for i in treatments:
     df_i = df_all[df_all["treatment"].isin([i])]
     name = ('df_' + str(i))
     dc.update({name : df_i})  #update dictionary of dfs with each loop itteration. 
-    print(dc)
 
 
 avgs = dict()
+yerrs = dict()
+
+#calculating avg point and yerr for each treatment
 
 for i in dc :
-    print(i, dc[i])
-    df_i = dc[i]
-    #print(type(df_i))
-    rep_cols = df_i[['rep1', 'rep2', 'rep3', 'rep4', 'rep5', 'rep6']]
-    #df_i.filter(like = 'rep')
-    #print(rep_cols)
-    avg_i = df_i[rep_cols].mean(axis=1)
-    avgs=  avgs.update({i : avg_i})
-    print(avgs)
+    df_i = dc[i]   # need time from original df_i in dc
+    rep_df_i = df_i[['rep1', 'rep2', 'rep3', 'rep4', 'rep5', 'rep6']]
+    avg_i = rep_df_i.mean(axis=1) #is this working? ...not a NoneType Error? 
+    avgs.update({'avg_'+i : avg_i })
+    yerr_i = rep_df_i.std(axis=1)  #is this working?  ...not a NoneType Error? 
+    yerrs.update({'yerr_'+i : yerr_i })
     
-    
-    
-    
-'''
 
-rep_cols = ['rep1', 'rep2', 'rep3', 'rep4', 'rep5', 'rep6']     # columns of just replicate assay abundance values
-avg_0 = df_0[rep_cols].mean(axis=1) #takes mean value across rep1-6 column for each row
-avg_40 = df_40[rep_cols].mean(axis=1)
-avg_400 = df_400[rep_cols].mean(axis=1)
-avg_4000 = df_4000[rep_cols].mean(axis=1)
-avg_40000 = df_40000[rep_cols].mean(axis=1)
-avg_400000 = df_400000[rep_cols].mean(axis=1) 
-
-
-yerrs = r_[[]]
-for i in treatments:
-    yerr_i = df_i[rep_cols].std(axis=1)
-    concatenate(r_[[yerrs]])  
-    print(yerrs)
-    '''
-yerr_0 = df_0[rep_cols].std(axis=1)
-yerr_40 = df_40[rep_cols].std(axis=1)
-yerr_400 = df_400[rep_cols].std(axis=1)
-yerr_4000 = df_4000[rep_cols].std(axis=1)
-yerr_40000 = df_40000[rep_cols].std(axis=1)
-yerr_400000 = df_400000[rep_cols].std(axis=1)
 
 '''
-
 ##################################
 
 # np data arrays
@@ -139,10 +112,13 @@ P = 1e4
 ##################################
 
 
+
+    
+
 #0 NH4 added
 
 P = 1e4
-S = (0.0 + 4.5e6)    #    treatment to add in this case is 0
+S = (0.0 + 4.5e6)    #    treatment to add in this case is 0 (treatment[i] +_____)
 k1= 2.8e-7
 
 k2 = 1.1       # seems to control steepness of slope
@@ -337,10 +313,13 @@ for t in times:
         else:
                 S = S + dSdt*step
         P = P + dPdt*step
-              
-        
-        
-
+ 
+    
+ 
+    
+ 
+    
+'''
 ####################################
 
 #graphing 
@@ -352,37 +331,34 @@ fig1, (ax1, ax2) = plt.subplots(1, 2, figsize=(12,7))
 fig1.suptitle('NH4 trials modeled with data', fontweight='bold', fontsize=25)
 
 
-#cell abundance subplot
-#model
+##cell abundance subplot##
+
+'''
+    #model
 ax1.plot(times,PsEuler0,color = 'm' , label  = 'zero NH4 added')
 ax1.plot(times,PsEuler40,color = 'r' , label = ' + 40 NH4 treatment')
 ax1.plot(times,PsEuler400,color = 'green' , label = ' + 400 NH4 treatment')
 ax1.plot(times,PsEuler4000, color = 'c', label = ' + 4000 NH4 added treatment')
 ax1.plot(times,PsEuler40000, color = 'b' , label = ' + 40000 NH4 treatment')
 ax1.plot(times,PsEuler400000 , color = 'k' , label = ' + 400000 NH4 treatment')
+'''
 
-#data
-ax1.plot(df_0['times'], avg_0, linestyle = 'None',  marker='o', color = 'm' )  #, label  = 'zero NH4 added')
-ax1.plot(df_40['times'], avg_40, linestyle = 'None',  marker='o', color = 'r' )  #, label = ' + 40 NH4 treatment')
-ax1.plot(df_400['times'], avg_400, linestyle = 'None',  marker='o', color = 'green' )  #, label = ' + 400 NH4 treatment')
-ax1.plot(df_4000['times'], avg_4000, linestyle = 'None',  marker='o', color = 'c' )      #, label = ' + 4000 NH4 added treatment')
-ax1.plot(df_40000['times'], avg_40000, linestyle = 'None',  marker='o', color = 'b' )   #label = ' + 40000 NH4 treatment')
-ax1.plot(df_400000['times'], avg_400000, linestyle = 'None',  marker='o', color = 'k' )  #, label = ' + 400000 NH4 treatment')
-
-#errorbars
-ax1.errorbar(df_0['times'], avg_0, yerr=yerr_0,fmt='none', color = 'm')
-ax1.errorbar(df_40['times'], avg_40, yerr=yerr_40,fmt='none', color = 'r')
-ax1.errorbar(df_400['times'], avg_400,yerr=yerr_400,fmt='none', color = 'green' )
-ax1.errorbar(df_4000['times'], avg_4000, yerr=yerr_4000,fmt='none', color = 'c' )
-ax1.errorbar(df_40000['times'], avg_40000, yerr=yerr_40000,fmt='none', color = 'b')
-ax1.errorbar(df_400000['times'], avg_400000, yerr=yerr_400000,fmt='none', color = 'k' )
-
+   #data
+colors = ('m', 'r', 'green', 'c', 'b', 'k')
+for i in treatments: 
+    df = dc['df_'+str(i)]
+    times = df['times']
+    data = avgs['avg_df_'+ str(i)]
+    yerr_graph = yerrs['yerr_df_'+ str(i)]
+    ax1.plot(times, data, linestyle = 'None', marker= 'o', label = ('nM NH4 :' + str(i))) #color = colors(i))
+    ax1.errorbar(times, data, yerr = yerr_graph, fmt='none' )  
 
 
 ax1.set(xlabel='Time (day $^-1$)', ylabel='number of cells (10^_)')
 ax1.set_title('Prochlorococcus Biomass over time', fontsize=20)
-ax1.legend(loc='lower right',prop={'size': 10}, fontsize=12)
+ax1.legend(loc='lower center',prop={'size': 10}, fontsize=12)
 
+'''
    
 #nutrient subplot
 ax2.plot(times,SsEuler0,color = 'm' , label  = 'zero NH4 added')
@@ -409,17 +385,18 @@ plt.xticks(fontsize = 20)
 plt.yticks(fontsize = 16)
 #plt.tick_params(axis='both', which = 'both', length = 2,  labelsize=16,)
 
+'''
 
-
-
+ax1.semilogy()
+ax2.semilogy()
 plt.show()
 
 
-
+'''
 
 #To do 
 '''
-
+'''
 array of times, data/model, error array name, label for each treatment.
 
 Then we can use treatment array to have all graphing things and can run a loop.  
