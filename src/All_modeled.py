@@ -66,16 +66,33 @@ yerrs = dict()
 #calculating avg point and yerr for each treatment
 
 for i in dc :
-    df_i = dc[i]   # need time from original df_i in dc
+    df_i = dc[i]   
     rep_df_i = df_i[['rep1', 'rep2', 'rep3', 'rep4', 'rep5', 'rep6']]
-    avg_i = rep_df_i.mean(axis=1) #is this working? ...not a NoneType Error? 
+    avg_i = rep_df_i.mean(axis=1)  
     avgs.update({'avg_'+i : avg_i })
-    yerr_i = rep_df_i.std(axis=1)  #is this working?  ...not a NoneType Error? 
+    yerr_i = rep_df_i.std(axis=1)   
     yerrs.update({'yerr_'+i : yerr_i })
     
 
 
+
+################################
+
+# Model
+
+
+################################
+
 '''
+dPdt = (max growth rate)(nutient concentration)/michelis-mention constant) + (nutrinet concentration) (Population size) 
+dSdt = (Supply of nutrientt) - (max growth rate)(nutient concentration)/michelis-mention constant) + (nutrinet concentration)*Cell quota
+
+dPdt = k2 * P * S /( (k2/k1) + S)    - delta*P     # k2 = Vmax  K1 = affinity for nutirent (alpha)  
+dSdt =  -P*( k2*S)/((k2/k1)+S)*Qn
+
+nutrient replete or deplete delta dependant on if S ~ 0.0
+'''
+
 ##################################
 
 # np data arrays
@@ -88,32 +105,48 @@ times = np.linspace(0,ndays,int(ndays/step))
 Qn = (9.4e-15*14.0*1e+6)  #Nitrogen Quota for Pro from Bertillison? 
 
 P = 1e4
-################################
-
-# Model
-
-
-################################
-
-'''
-#dPdt = (max growth rate)(nutient concentration)/michelis-mention constant) + (nutrinet concentration) (Population size) 
-#dSdt = (Supply of nutrientt) - (max growth rate)(nutient concentration)/michelis-mention constant) + (nutrinet concentration)*Cell quota
-
-#dPdt = k2 * P * S /( (k2/k1) + S)    - delta*P     # k2 = Vmax  K1 = affinity for nutirent (alpha)  
-#dSdt =  -P*( k2*S)/((k2/k1)+S)*Qn
-
-#nutrient replete or deplete delta dependant on if S ~ 0.0
-'''
-
+#S = (treatment + (#some based level of N in the media))
 ##################################
 
 #   Integration  
 
 ##################################
+'''
+
+SsEulers = dict() 
+PsEulers = dict() 
+k1s = dict()
+k2s = dict()
+nrdelta =  dict()
+nddelta = dict()
+
+#list of params?  
+
+for i in treatments:
+    S = (treatments[i] + 4.5e6)
+    SsEuler = np.array([])
+    PsEuler = np.array([])
+    #list of params? 
+    for t in times:
+            PsEuler = np.append(PsEuler,P)
+            SsEuler = np.append(SsEuler,S)
+            if (S>1e-4):
+                delta = nrdelta
+            else:
+                delta = nddelta
+            dPdt = k2 * P * S /( (k2/k1) + S) - delta*P
+            dSdt =-P*( k2*S)/((k2/k1)+S)*Qn
+            if S+dSdt*step <0:                    #making sure S isnt taken negative and therefore causing issues when we log transform the data
+                    S = 4e-4
+            else:
+                    S = S + dSdt*step
+            P = P + dPdt*step
+    SsEulers.update({'SsEuler'+ i : SsEuler })
+    PsEulers.update({'PsEuler'+ i : PsEuler })
+   '''
+#TypeError: unsupported operand type(s) for *: 'dict' and 'float'
 
 
-
-    
 
 #0 NH4 added
 
@@ -319,7 +352,7 @@ for t in times:
     
  
     
-'''
+
 ####################################
 
 #graphing 
@@ -359,7 +392,17 @@ ax1.set_title('Prochlorococcus Biomass over time', fontsize=20)
 ax1.legend(loc='lower center',prop={'size': 10}, fontsize=12)
 
 '''
-   
+SsEulers = dic() #need to populate with Euler solutions from all runs. 
+PsEulers = dic() #need to populate with Euler solutions from all runs.
+
+
+for i in treatments: 
+    df = dc['df_'+str(i)]
+    times = df['times']
+    Ss = SsEulers['SsEuler_'+ str(i)]
+    ax1.plot(times, Ss, label = ('nM NH4 :' + str(i))) #color = colors(i))
+ 
+    
 #nutrient subplot
 ax2.plot(times,SsEuler0,color = 'm' , label  = 'zero NH4 added')
 ax2.plot(times,SsEuler40,color = 'r' , label = ' + 40 NH4 treatment')
@@ -369,9 +412,7 @@ ax2.plot(times,SsEuler40000, color = 'b' , label = ' + 40000 NH4 treatment')
 ax2.plot(times,SsEuler400000 , color = 'k' , label = ' + 400000 NH4 treatment')
 
 
-ax1.semilogy()
-ax2.semilogy()
-
+'''
 
 ax2.set(xlabel='Time (day $^-1)$', ylabel='Nutrient concentration(10^_)')
 ax2.set_title('NH4 concentrations over time',fontsize=20)
@@ -385,7 +426,6 @@ plt.xticks(fontsize = 20)
 plt.yticks(fontsize = 16)
 #plt.tick_params(axis='both', which = 'both', length = 2,  labelsize=16,)
 
-'''
 
 ax1.semilogy()
 ax2.semilogy()
