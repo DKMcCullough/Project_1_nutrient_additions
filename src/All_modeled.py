@@ -84,7 +84,7 @@ yerr_400000 = df_400000[rep_cols].std(axis=1)
 
 #################################
 
-step = 1
+step = 0.01
 ndays = 37
 times = np.linspace(0,ndays,int(ndays/step))
 
@@ -101,7 +101,8 @@ P = 1e4
 #dSdt = (Supply of nutriet) - (max growth rate)(nutient concentration)/michelis-mention constant) + (nutrinet concentration)
 
 #dPdt = k2 * P * S /( (k2/k1) + S)    - delta*P     # k2 = Vmax  K1 = affinity for nutirent (alpha) 
-#dSdt =  -P*( k2*S)/((k2/k1)+S)
+#dSdt =  -P*( k2*S)/((k2/k1)+S) + (nutrinet concentration)*Cell quota
+Qn = (9.4e-15*14.0*1e+6)  #Nitrogen Quota for Pro from Bertillison? 
 
 #nutrient replete or deplete delta dependant on if S ~ 0.0
 '''
@@ -111,18 +112,18 @@ P = 1e4
 #   Integration  
 
 ##################################
-
+Qn = (9.4e-15*14.0*1e+6)  #Nitrogen Quota for Pro from Bertillison? 
 
 #0 NH4 added
 
 P = 1e4
-S = (0.0 + 4.5e6)    #    treatment to add in this case is 0
-k1= 2.8e-7
+S = (0.0 + 4.1e6)    #    treatment to add in this case is 0
+k1= 1.3e-6
 
-k2 = 1.1       # seems to control steepness of slope
+k2 = 0.45       # seems to control steepness of slope
 
-nrdelta = 0.03      #nutrient replete delta
-nddelta = 0.1       #nutrient deplete delta
+nrdelta = 0.02      #nutrient replete delta
+nddelta = 0.12       #nutrient deplete delta
 
 
 SsEuler0 = np.array([])
@@ -137,7 +138,7 @@ for t in times:
         else:
             delta = nddelta
         dPdt = k2 * P * S /( (k2/k1) + S) - delta*P
-        dSdt =-P*( k2*S)/((k2/k1)+S)
+        dSdt = -P*(( k2*S)/((k2/k1)+S)) #*Qn
         if S+dSdt*step <0:                    #making sure S isnt taken negative and therefore causing issues when we log transform the data
                 S = 4e-4
         else:
@@ -148,13 +149,14 @@ for t in times:
 #40 
 
 P = 1e4
-S = (40 + 5.7e6) 
-k1= 2.2e-7
+S = (40 + 4.1e6 + 1.0e6)  #4.1e6
+     #5.7e6) 
+k1=  1.3e-6     #2.2e-7
 
-k2 = 1.2       # seems to control steepness of slope
+k2 = 0.45   #1.2       # seems to control steepness of slope
 
-nrdelta = 0.039    #nutrient replete delta
-nddelta = 0.14   #nutrient deplete delta
+nrdelta = 0.00    #nutrient replete delta
+nddelta = 0.12   #nutrient deplete delta
 
 
 SsEuler40 = np.array([])
@@ -169,7 +171,7 @@ for t in times:
         else:
             delta = nddelta
         dPdt = k2 * P * S /( (k2/k1) + S) - delta*P
-        dSdt =-P*( k2*S)/((k2/k1)+S)
+        dSdt = -P*(( k2*S)/((k2/k1)+S))
         if S+dSdt*step <0:                    #making sure S isnt taken negative and therefore causing issues when we log transform the data
                 S = 4e-4
         else:
@@ -182,13 +184,14 @@ for t in times:
 #400
 
 P = 1e4
-S = (4.0e2 + 5.8e6)   #4e2 is the added NH4 in the treatment
-k1= 2.0e-7
+S = (4.0e2 + 4.1e6+ 1.0e5)
+     #5.8e6)   #4e2 is the added NH4 in the treatment
+k1= 1.3e-6    #2.0e-7
 
-k2 = 1.1      # seems to control steepness of slope
+k2 = 0.45    #1.1      # seems to control steepness of slope
 
-nrdelta = 0.03     #nutrient replete delta
-nddelta = 0.19    #nutrient deplete delta
+nrdelta = 0.00     #nutrient replete delta
+nddelta = 0.17    #nutrient deplete delta
 
 
 SsEuler400 = np.array([])
@@ -203,7 +206,7 @@ for t in times:
         else:
             delta = nddelta
         dPdt = k2 * P * S /( (k2/k1) + S) - delta*P
-        dSdt =-P*( k2*S)/((k2/k1)+S)
+        dSdt = -P*(( k2*S)/((k2/k1)+S))
         if S+dSdt*step <0:                    #making sure S isnt taken negative and therefore causing issues when we log transform the data
                 S = 4e-4
         else:
@@ -215,13 +218,14 @@ for t in times:
 #4000
 
 P = 1e4
-S = (4.0e3 + 1.3e7)      #4e3 is the added treatement
-k1= 2.0e-7
+S = (4.0e3 + 4.1e6 + 0.9e7)
+    # 1.3e7)      #4e3 is the added treatement
+k1= 1.3e-6    #2.0e-7
 
-k2 = 0.9         # seems to control steepness of slope
+k2 = 0.45    #0.7         # seems to control steepness of slope
 
-nrdelta = 0.06    #nutrient replete delta
-nddelta = 0.23    #nutrient deplete delta
+nrdelta = 0.00    #nutrient replete delta
+nddelta = 0.2    #nutrient deplete delta
 
 
 SsEuler4000 = np.array([])
@@ -236,7 +240,7 @@ for t in times:
         else:
             delta = nddelta
         dPdt = k2 * P * S /( (k2/k1) + S) - delta*P
-        dSdt =-P*( k2*S)/((k2/k1)+S)
+        dSdt = -P*(( k2*S)/((k2/k1)+S))
         if S+dSdt*step <0:                    #making sure S isnt taken negative and therefore causing issues when we log transform the data
                 S = 4e-4
         else:
@@ -251,13 +255,14 @@ for t in times:
 #40000
 
 P = 1e4
-S = (4e4 + 1.1e8)#2e7 would be correct for assay set up
-k1= 2.9e-7
+S = (4.0e4 + 4.1e6 + 1.0e8)
+     #1.5e8)#2e7 would be correct for assay set up
+k1= 1.3e-6   #2.9e-7
 
-k2 = 0.62      # seems to control steepness of slope
+k2 = 0.45   #0.7     # seems to control steepness of slope
 
-nrdelta = 0.05    #nutrient replete delta
-nddelta = 0.4    #nutrient deplete delta
+nrdelta = 0.0    #nutrient replete delta
+nddelta = 0.12    #nutrient deplete delta
 
 
 SsEuler40000 = np.array([])
@@ -272,7 +277,7 @@ for t in times:
         else:
             delta = nddelta
         dPdt = k2 * P * S /( (k2/k1) + S) - delta*P
-        dSdt =-P*( k2*S)/((k2/k1)+S)
+        dSdt = -P*(( k2*S)/((k2/k1)+S))
         if S+dSdt*step <0:                    #making sure S isnt taken negative and therefore causing issues when we log transform the data
                 S = 4e-4
         else:
@@ -284,13 +289,13 @@ for t in times:
 #400000
 
 P = 1e4
-S = (4e5 + 1.8e8) 
-k1= 2.2e-7
+S = (4.0e5 + 4.1e6 + 1.8e8) #nMol concentrations of N
+k1= 1.3e-6     #2.2e-7
 
-k2 = 0.55      # seems to control steepness of slope
+k2 = 0.45   #0.55      # seems to control steepness of slope
 
-nrdelta = 0.007    #nutrient replete delta
-nddelta = 0.01    #nutrient deplete delta
+nrdelta = 0.00    #nutrient replete delta
+nddelta = 0.12    #nutrient deplete delta
 
 
 SsEuler400000 = np.array([])
@@ -305,7 +310,7 @@ for t in times:
         else:
             delta = nddelta
         dPdt = k2 * P * S /( (k2/k1) + S) - delta*P
-        dSdt =-P*( k2*S)/((k2/k1)+S)
+        dSdt =-P*(( k2*S)/((k2/k1)+S))
         if S+dSdt*step <0:                    #making sure S isnt taken negative and therefore causing issues when we log transform the data
                 S = 4e-4
         else:
@@ -323,74 +328,83 @@ for t in times:
 
 
 fig1, (ax1, ax2) = plt.subplots(1, 2, figsize=(12,7))
-fig1.suptitle('NH4 trials modeled with data', fontweight='bold', fontsize=25)
+fig1.suptitle('NH4 trials modeled', fontweight='bold', fontsize=22)
 
 
 #cell abundance subplot
 #model
-ax1.plot(times,PsEuler0,color = 'm' , label  = 'zero NH4 added')
-ax1.plot(times,PsEuler40,color = 'r' , label = ' + 40 NH4 treatment')
+#ax1.plot(times,PsEuler0,color = 'm' , label  = 'zero NH4 added')
+#ax1.plot(times,PsEuler40,color = 'r' , label = ' + 40 NH4 treatment')
 ax1.plot(times,PsEuler400,color = 'green' , label = ' + 400 NH4 treatment')
-ax1.plot(times,PsEuler4000, color = 'c', label = ' + 4000 NH4 added treatment')
+ax1.plot(times,PsEuler4000, color = 'c', label = ' + 4000 NH4 treatment')
 ax1.plot(times,PsEuler40000, color = 'b' , label = ' + 40000 NH4 treatment')
-ax1.plot(times,PsEuler400000 , color = 'k' , label = ' + 400000 NH4 treatment')
+#ax1.plot(times,PsEuler400000 , color = 'k' , label = ' + 400000 NH4 treatment')
 
 #data
-ax1.plot(df_0['times'], avg_0, linestyle = 'None',  marker='o', color = 'm' )  #, label  = 'zero NH4 added')
-ax1.plot(df_40['times'], avg_40, linestyle = 'None',  marker='o', color = 'r' )  #, label = ' + 40 NH4 treatment')
+#ax1.plot(df_0['times'], avg_0, linestyle = 'None',  marker='o', color = 'm' )  #, label  = 'zero NH4 added')
+#ax1.plot(df_40['times'], avg_40, linestyle = 'None',  marker='o', color = 'r' )  #, label = ' + 40 NH4 treatment')
 ax1.plot(df_400['times'], avg_400, linestyle = 'None',  marker='o', color = 'green' )  #, label = ' + 400 NH4 treatment')
 ax1.plot(df_4000['times'], avg_4000, linestyle = 'None',  marker='o', color = 'c' )      #, label = ' + 4000 NH4 added treatment')
 ax1.plot(df_40000['times'], avg_40000, linestyle = 'None',  marker='o', color = 'b' )   #label = ' + 40000 NH4 treatment')
-ax1.plot(df_400000['times'], avg_400000, linestyle = 'None',  marker='o', color = 'k' )  #, label = ' + 400000 NH4 treatment')
+#ax1.plot(df_400000['times'], avg_400000, linestyle = 'None',  marker='o', color = 'k' )  #, label = ' + 400000 NH4 treatment')
 
 #errorbars
-ax1.errorbar(df_0['times'], avg_0, yerr=yerr_0,fmt='none', color = 'm')
-ax1.errorbar(df_40['times'], avg_40, yerr=yerr_40,fmt='none', color = 'r')
+#ax1.errorbar(df_0['times'], avg_0, yerr=yerr_0,fmt='none', color = 'm')
+#ax1.errorbar(df_40['times'], avg_40, yerr=yerr_40,fmt='none', color = 'r')
 ax1.errorbar(df_400['times'], avg_400,yerr=yerr_400,fmt='none', color = 'green' )
 ax1.errorbar(df_4000['times'], avg_4000, yerr=yerr_4000,fmt='none', color = 'c' )
 ax1.errorbar(df_40000['times'], avg_40000, yerr=yerr_40000,fmt='none', color = 'b')
-ax1.errorbar(df_400000['times'], avg_400000, yerr=yerr_400000,fmt='none', color = 'k' )
+#ax1.errorbar(df_400000['times'], avg_400000, yerr=yerr_400000,fmt='none', color = 'k' )
 
 
 
-ax1.set(xlabel='Time (day $^-1$)', ylabel='number of cells (10^_)')
-ax1.set_title('Prochlorococcus Biomass over time', fontsize=20)
+ax1.set(xlabel='Time (day $^{-1}$)', ylabel='Cells (ml$^{-1}$)')
+ax1.set_title('Prochlorococcus Biomass Dynamics', fontsize=18)
 ax1.legend(loc='lower right',prop={'size': 10}, fontsize=12)
 
    
 #nutrient subplot
-ax2.plot(times,SsEuler0,color = 'm' , label  = 'zero NH4 added')
-ax2.plot(times,SsEuler40,color = 'r' , label = ' + 40 NH4 treatment')
+#ax2.plot(times,SsEuler0,color = 'm' , label  = 'zero NH4 added')
+#ax2.plot(times,SsEuler40,color = 'r' , label = ' + 40 NH4 treatment')
 ax2.plot(times,SsEuler400,color = 'green' , label = ' + 400 NH4 treatment')
-ax2.plot(times,SsEuler4000, color = 'c' , label = ' + 4000 NH4 added treatment')
+ax2.plot(times,SsEuler4000, color = 'c' , label = ' + 4000 NH4 treatment')
 ax2.plot(times,SsEuler40000, color = 'b' , label = ' + 40000 NH4 treatment')
-ax2.plot(times,SsEuler400000 , color = 'k' , label = ' + 400000 NH4 treatment')
+#ax2.plot(times,SsEuler400000 , color = 'k' , label = ' + 400000 NH4 treatment')
 
 
 ax1.semilogy()
-ax2.semilogy()
+ax2.set_yscale('log')    #does this produce a different result than semilog? Testing btwn ax1 and ax2
+#ax2.semilogy()
 
 
-ax2.set(xlabel='Time (day $^-1)$', ylabel='Nutrient concentration(10^_)')
-ax2.set_title('NH4 concentrations over time',fontsize=20)
+ax2.set(xlabel='Time (day $^{-1})$', ylabel='Nutrient Concentration (nmol ml$^{-1}$)')
+ax2.set_title('NH4 Dynamics',fontsize=18)
 ax2.legend(loc='lower left',prop={'size': 10}, fontsize=12)
-
+ax2.yaxis.set_label_position("right")
+ax2.yaxis.tick_right()
 
 
 #plt.legend(prop={"size":14})
 
-plt.xticks(fontsize = 20)
+plt.xticks(fontsize = 16)
 plt.yticks(fontsize = 16)
+plt.yscale("log")
 #plt.tick_params(axis='both', which = 'both', length = 2,  labelsize=16,)
 
 
 
 
 plt.show()
+'''
 
-
-
-
+extras = [0.0, 1.0e6,1.0e5,0.9e7,1.0e8,1.8e8]
+fig2 = plt.scatter(treatments,extras)
+plt.title('NH4 Fun', fontsize=18)
+plt.xlabel('Assay Treatment NH4 (nmol ml$^{-1}$)')
+plt.ylabel('extra NH4 needed(nmol ml$^{-1}$)')
+plt.semilogx()
+plt.semilogy()
+'''
 #To do 
 '''
 
