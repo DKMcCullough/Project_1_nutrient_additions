@@ -102,7 +102,11 @@ P = 1e4
 
 #dPdt = k2 * P * S /( (k2/k1) + S)    - delta*P     # k2 = Vmax  K1 = affinity for nutirent (alpha) 
 #dSdt =  -P*( k2*S)/((k2/k1)+S) + (nutrinet concentration)*Cell quota
-Qn = (9.4e-15*14.0*1e+6)  #Nitrogen Quota for Pro from Bertillison? 
+
+Qn = (9.4e-15*(1/14.0)*1e+9)  #Nitrogen Quota for Pro 
+#9.4*10^-15 g N per cell   #Nitrogen fg quota of Pro cells from Bertillison et al 2003
+#14 g per Mol N     #N g to M converstion from periodic table
+#10^9 ng per g      #conversion from grams to n grams
 
 #nutrient replete or deplete delta dependant on if S ~ 0.0
 '''
@@ -112,17 +116,18 @@ Qn = (9.4e-15*14.0*1e+6)  #Nitrogen Quota for Pro from Bertillison?
 #   Integration  
 
 ##################################
-Qn = (9.4e-15*14.0*1e+6)  #Nitrogen Quota for Pro from Bertillison? 
+Qn = (9.4e-15*((14.0))*1e+9)  #Nitrogen Quota for Pro from Bertillison? #going from Ngrams per cell to N mol per cell and from fgram to ngram
+
 
 #0 NH4 added
 
 P = 1e4
-S = (0.0 + 4.1e6)    #    treatment to add in this case is 0
-k1= 1.3e-6
+S = (0.0 + 1.64e3)    #    treatment to add in this case is 0
+k1= 4.2e-3
 
-k2 = 0.45       # seems to control steepness of slope
+k2 = 0.6       # seems to control steepness of slope
 
-nrdelta = 0.02      #nutrient replete delta
+nrdelta = 0.00      #nutrient replete delta
 nddelta = 0.12       #nutrient deplete delta
 
 
@@ -138,9 +143,9 @@ for t in times:
         else:
             delta = nddelta
         dPdt = k2 * P * S /( (k2/k1) + S) - delta*P
-        dSdt = -P*(( k2*S)/((k2/k1)+S)) #*Qn
+        dSdt = -P*(( k2*S)/((k2/k1)+S))*Qn
         if S+dSdt*step <0:                    #making sure S isnt taken negative and therefore causing issues when we log transform the data
-                S = 4e-4
+                S = 4e-47
         else:
                 S = S + dSdt*step
         P = P + dPdt*step
@@ -171,7 +176,7 @@ for t in times:
         else:
             delta = nddelta
         dPdt = k2 * P * S /( (k2/k1) + S) - delta*P
-        dSdt = -P*(( k2*S)/((k2/k1)+S))
+        dSdt = -P*(( k2*S)/((k2/k1)+S))*Qn
         if S+dSdt*step <0:                    #making sure S isnt taken negative and therefore causing issues when we log transform the data
                 S = 4e-4
         else:
@@ -206,7 +211,7 @@ for t in times:
         else:
             delta = nddelta
         dPdt = k2 * P * S /( (k2/k1) + S) - delta*P
-        dSdt = -P*(( k2*S)/((k2/k1)+S))
+        dSdt = -P*(( k2*S)/((k2/k1)+S))*Qn
         if S+dSdt*step <0:                    #making sure S isnt taken negative and therefore causing issues when we log transform the data
                 S = 4e-4
         else:
@@ -240,7 +245,7 @@ for t in times:
         else:
             delta = nddelta
         dPdt = k2 * P * S /( (k2/k1) + S) - delta*P
-        dSdt = -P*(( k2*S)/((k2/k1)+S))
+        dSdt = -P*(( k2*S)/((k2/k1)+S))*Qn
         if S+dSdt*step <0:                    #making sure S isnt taken negative and therefore causing issues when we log transform the data
                 S = 4e-4
         else:
@@ -277,7 +282,7 @@ for t in times:
         else:
             delta = nddelta
         dPdt = k2 * P * S /( (k2/k1) + S) - delta*P
-        dSdt = -P*(( k2*S)/((k2/k1)+S))
+        dSdt = -P*(( k2*S)/((k2/k1)+S))*Qn
         if S+dSdt*step <0:                    #making sure S isnt taken negative and therefore causing issues when we log transform the data
                 S = 4e-4
         else:
@@ -310,7 +315,7 @@ for t in times:
         else:
             delta = nddelta
         dPdt = k2 * P * S /( (k2/k1) + S) - delta*P
-        dSdt =-P*(( k2*S)/((k2/k1)+S))
+        dSdt =-P*(( k2*S)/((k2/k1)+S))*Qn
         if S+dSdt*step <0:                    #making sure S isnt taken negative and therefore causing issues when we log transform the data
                 S = 4e-4
         else:
@@ -333,27 +338,27 @@ fig1.suptitle('NH4 trials modeled', fontweight='bold', fontsize=22)
 
 #cell abundance subplot
 #model
-#ax1.plot(times,PsEuler0,color = 'm' , label  = 'zero NH4 added')
+ax1.plot(times,PsEuler0,color = 'm' , label  = 'zero NH4 added')
 #ax1.plot(times,PsEuler40,color = 'r' , label = ' + 40 NH4 treatment')
-ax1.plot(times,PsEuler400,color = 'green' , label = ' + 400 NH4 treatment')
-ax1.plot(times,PsEuler4000, color = 'c', label = ' + 4000 NH4 treatment')
-ax1.plot(times,PsEuler40000, color = 'b' , label = ' + 40000 NH4 treatment')
+#ax1.plot(times,PsEuler400,color = 'green' , label = ' + 400 NH4 treatment')
+#ax1.plot(times,PsEuler4000, color = 'c', label = ' + 4000 NH4 treatment')
+#ax1.plot(times,PsEuler40000, color = 'b' , label = ' + 40000 NH4 treatment')
 #ax1.plot(times,PsEuler400000 , color = 'k' , label = ' + 400000 NH4 treatment')
 
 #data
-#ax1.plot(df_0['times'], avg_0, linestyle = 'None',  marker='o', color = 'm' )  #, label  = 'zero NH4 added')
+ax1.plot(df_0['times'], avg_0, linestyle = 'None',  marker='o', color = 'm' )  #, label  = 'zero NH4 added')
 #ax1.plot(df_40['times'], avg_40, linestyle = 'None',  marker='o', color = 'r' )  #, label = ' + 40 NH4 treatment')
-ax1.plot(df_400['times'], avg_400, linestyle = 'None',  marker='o', color = 'green' )  #, label = ' + 400 NH4 treatment')
-ax1.plot(df_4000['times'], avg_4000, linestyle = 'None',  marker='o', color = 'c' )      #, label = ' + 4000 NH4 added treatment')
-ax1.plot(df_40000['times'], avg_40000, linestyle = 'None',  marker='o', color = 'b' )   #label = ' + 40000 NH4 treatment')
+#ax1.plot(df_400['times'], avg_400, linestyle = 'None',  marker='o', color = 'green' )  #, label = ' + 400 NH4 treatment')
+#ax1.plot(df_4000['times'], avg_4000, linestyle = 'None',  marker='o', color = 'c' )      #, label = ' + 4000 NH4 added treatment')
+#ax1.plot(df_40000['times'], avg_40000, linestyle = 'None',  marker='o', color = 'b' )   #label = ' + 40000 NH4 treatment')
 #ax1.plot(df_400000['times'], avg_400000, linestyle = 'None',  marker='o', color = 'k' )  #, label = ' + 400000 NH4 treatment')
 
 #errorbars
-#ax1.errorbar(df_0['times'], avg_0, yerr=yerr_0,fmt='none', color = 'm')
+ax1.errorbar(df_0['times'], avg_0, yerr=yerr_0,fmt='none', color = 'm')
 #ax1.errorbar(df_40['times'], avg_40, yerr=yerr_40,fmt='none', color = 'r')
-ax1.errorbar(df_400['times'], avg_400,yerr=yerr_400,fmt='none', color = 'green' )
-ax1.errorbar(df_4000['times'], avg_4000, yerr=yerr_4000,fmt='none', color = 'c' )
-ax1.errorbar(df_40000['times'], avg_40000, yerr=yerr_40000,fmt='none', color = 'b')
+#ax1.errorbar(df_400['times'], avg_400,yerr=yerr_400,fmt='none', color = 'green' )
+#ax1.errorbar(df_4000['times'], avg_4000, yerr=yerr_4000,fmt='none', color = 'c' )
+#ax1.errorbar(df_40000['times'], avg_40000, yerr=yerr_40000,fmt='none', color = 'b')
 #ax1.errorbar(df_400000['times'], avg_400000, yerr=yerr_400000,fmt='none', color = 'k' )
 
 
@@ -364,11 +369,11 @@ ax1.legend(loc='lower right',prop={'size': 10}, fontsize=12)
 
    
 #nutrient subplot
-#ax2.plot(times,SsEuler0,color = 'm' , label  = 'zero NH4 added')
+ax2.plot(times,SsEuler0,color = 'm' , label  = 'zero NH4 added')
 #ax2.plot(times,SsEuler40,color = 'r' , label = ' + 40 NH4 treatment')
-ax2.plot(times,SsEuler400,color = 'green' , label = ' + 400 NH4 treatment')
-ax2.plot(times,SsEuler4000, color = 'c' , label = ' + 4000 NH4 treatment')
-ax2.plot(times,SsEuler40000, color = 'b' , label = ' + 40000 NH4 treatment')
+#ax2.plot(times,SsEuler400,color = 'green' , label = ' + 400 NH4 treatment')
+#ax2.plot(times,SsEuler4000, color = 'c' , label = ' + 4000 NH4 treatment')
+#ax2.plot(times,SsEuler40000, color = 'b' , label = ' + 40000 NH4 treatment')
 #ax2.plot(times,SsEuler400000 , color = 'k' , label = ' + 400000 NH4 treatment')
 
 
@@ -386,8 +391,8 @@ ax2.yaxis.tick_right()
 
 #plt.legend(prop={"size":14})
 
-plt.xticks(fontsize = 16)
-plt.yticks(fontsize = 16)
+plt.xticks(fontsize = 20)
+plt.yticks(fontsize = 20)
 plt.yscale("log")
 #plt.tick_params(axis='both', which = 'both', length = 2,  labelsize=16,)
 
