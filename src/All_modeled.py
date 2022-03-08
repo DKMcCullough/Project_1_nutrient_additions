@@ -85,10 +85,10 @@ yerr_400000 = df_400000[rep_cols].std(axis=1)
 #################################
 
 step = 0.01
-ndays = 37
+ndays = 35
 times = np.linspace(0,ndays,int(ndays/step))
 
-P = 1e4
+
 ################################
 
 # Model
@@ -116,19 +116,20 @@ Qn = (9.4e-15*(1/14.0)*1e+9)  #Nitrogen Quota for Pro
 #   Integration  
 
 ##################################
+P0 = 1e4
 Qn = (9.4e-15*((14.0))*1e+9)  #Nitrogen Quota for Pro from Bertillison? #going from Ngrams per cell to N mol per cell and from fgram to ngram
 
 
 #0 NH4 added
 
-P = 1e4
-S = (0.0 + 1.64e3)    #    treatment to add in this case is 0
-k1= 4.2e-3
+P = 1e4  # units are cells per mL
+S = (0.0 + (164) + 400)    #nM N per ml for units      #    0.164 micromolar rediual N from Calfee_et_al 2022
+k1= 4.5e-3
 
-k2 = 0.6       # seems to control steepness of slope
+k2 = 0.53       # seems to control steepness of slope
 
 nrdelta = 0.00      #nutrient replete delta
-nddelta = 0.12       #nutrient deplete delta
+nddelta = 0.13       #nutrient deplete delta
 
 
 SsEuler0 = np.array([])
@@ -154,11 +155,11 @@ for t in times:
 #40 
 
 P = 1e4
-S = (40 + 4.1e6 + 1.0e6)  #4.1e6
+S = (40 + (164) + 400)  #4.1e6
      #5.7e6) 
-k1=  1.3e-6     #2.2e-7
+k1=  4.5e-3     #2.2e-7
 
-k2 = 0.45   #1.2       # seems to control steepness of slope
+k2 = 0.53   #1.2       # seems to control steepness of slope
 
 nrdelta = 0.00    #nutrient replete delta
 nddelta = 0.12   #nutrient deplete delta
@@ -189,11 +190,11 @@ for t in times:
 #400
 
 P = 1e4
-S = (4.0e2 + 4.1e6+ 1.0e5)
+S = (4.0e2 + (164) + 400)
      #5.8e6)   #4e2 is the added NH4 in the treatment
-k1= 1.3e-6    #2.0e-7
+k1= 4.5e-3    #2.0e-7
 
-k2 = 0.45    #1.1      # seems to control steepness of slope
+k2 = 0.53    #1.1      # seems to control steepness of slope
 
 nrdelta = 0.00     #nutrient replete delta
 nddelta = 0.17    #nutrient deplete delta
@@ -223,11 +224,11 @@ for t in times:
 #4000
 
 P = 1e4
-S = (4.0e3 + 4.1e6 + 0.9e7)
+S = (4.0e3 + (164) + 400)
     # 1.3e7)      #4e3 is the added treatement
-k1= 1.3e-6    #2.0e-7
+k1= 4.5e-3    #2.0e-7
 
-k2 = 0.45    #0.7         # seems to control steepness of slope
+k2 = 0.53    #0.7         # seems to control steepness of slope
 
 nrdelta = 0.00    #nutrient replete delta
 nddelta = 0.2    #nutrient deplete delta
@@ -260,11 +261,11 @@ for t in times:
 #40000
 
 P = 1e4
-S = (4.0e4 + 4.1e6 + 1.0e8)
+S = (4.0e4 + (164) + 400)
      #1.5e8)#2e7 would be correct for assay set up
-k1= 1.3e-6   #2.9e-7
+k1= 4.5e-3   #2.9e-7
 
-k2 = 0.45   #0.7     # seems to control steepness of slope
+k2 = 0.53   #0.7     # seems to control steepness of slope
 
 nrdelta = 0.0    #nutrient replete delta
 nddelta = 0.12    #nutrient deplete delta
@@ -294,10 +295,10 @@ for t in times:
 #400000
 
 P = 1e4
-S = (4.0e5 + 4.1e6 + 1.8e8) #nMol concentrations of N
-k1= 1.3e-6     #2.2e-7
+S = (4.0e5 + (164) + 400) #nMol concentrations of N
+k1= 4.5e-3     #2.2e-7
 
-k2 = 0.45   #0.55      # seems to control steepness of slope
+k2 = 0.53   #0.55      # seems to control steepness of slope
 
 nrdelta = 0.00    #nutrient replete delta
 nddelta = 0.12    #nutrient deplete delta
@@ -339,33 +340,33 @@ fig1.suptitle('NH4 trials modeled', fontweight='bold', fontsize=22)
 #cell abundance subplot
 #model
 ax1.plot(times,PsEuler0,color = 'm' , label  = 'zero NH4 added')
-#ax1.plot(times,PsEuler40,color = 'r' , label = ' + 40 NH4 treatment')
-#ax1.plot(times,PsEuler400,color = 'green' , label = ' + 400 NH4 treatment')
-#ax1.plot(times,PsEuler4000, color = 'c', label = ' + 4000 NH4 treatment')
-#ax1.plot(times,PsEuler40000, color = 'b' , label = ' + 40000 NH4 treatment')
-#ax1.plot(times,PsEuler400000 , color = 'k' , label = ' + 400000 NH4 treatment')
+ax1.plot(times,PsEuler40,color = 'r' , label = ' + 40 NH4 treatment')
+ax1.plot(times,PsEuler400,color = 'green' , label = ' + 400 NH4 treatment')
+ax1.plot(times,PsEuler4000, color = 'c', label = ' + 4000 NH4 treatment')
+ax1.plot(times,PsEuler40000, color = 'b' , label = ' + 40000 NH4 treatment')
+ax1.plot(times,PsEuler400000 , color = 'k' , label = ' + 400000 NH4 treatment')
 
 #data
 ax1.plot(df_0['times'], avg_0, linestyle = 'None',  marker='o', color = 'm' )  #, label  = 'zero NH4 added')
-#ax1.plot(df_40['times'], avg_40, linestyle = 'None',  marker='o', color = 'r' )  #, label = ' + 40 NH4 treatment')
-#ax1.plot(df_400['times'], avg_400, linestyle = 'None',  marker='o', color = 'green' )  #, label = ' + 400 NH4 treatment')
-#ax1.plot(df_4000['times'], avg_4000, linestyle = 'None',  marker='o', color = 'c' )      #, label = ' + 4000 NH4 added treatment')
-#ax1.plot(df_40000['times'], avg_40000, linestyle = 'None',  marker='o', color = 'b' )   #label = ' + 40000 NH4 treatment')
-#ax1.plot(df_400000['times'], avg_400000, linestyle = 'None',  marker='o', color = 'k' )  #, label = ' + 400000 NH4 treatment')
+ax1.plot(df_40['times'], avg_40, linestyle = 'None',  marker='o', color = 'r' )  #, label = ' + 40 NH4 treatment')
+ax1.plot(df_400['times'], avg_400, linestyle = 'None',  marker='o', color = 'green' )  #, label = ' + 400 NH4 treatment')
+ax1.plot(df_4000['times'], avg_4000, linestyle = 'None',  marker='o', color = 'c' )      #, label = ' + 4000 NH4 added treatment')
+ax1.plot(df_40000['times'], avg_40000, linestyle = 'None',  marker='o', color = 'b' )   #label = ' + 40000 NH4 treatment')
+ax1.plot(df_400000['times'], avg_400000, linestyle = 'None',  marker='o', color = 'k' )  #, label = ' + 400000 NH4 treatment')
 
 #errorbars
 ax1.errorbar(df_0['times'], avg_0, yerr=yerr_0,fmt='none', color = 'm')
-#ax1.errorbar(df_40['times'], avg_40, yerr=yerr_40,fmt='none', color = 'r')
-#ax1.errorbar(df_400['times'], avg_400,yerr=yerr_400,fmt='none', color = 'green' )
-#ax1.errorbar(df_4000['times'], avg_4000, yerr=yerr_4000,fmt='none', color = 'c' )
-#ax1.errorbar(df_40000['times'], avg_40000, yerr=yerr_40000,fmt='none', color = 'b')
-#ax1.errorbar(df_400000['times'], avg_400000, yerr=yerr_400000,fmt='none', color = 'k' )
+ax1.errorbar(df_40['times'], avg_40, yerr=yerr_40,fmt='none', color = 'r')
+ax1.errorbar(df_400['times'], avg_400,yerr=yerr_400,fmt='none', color = 'green' )
+ax1.errorbar(df_4000['times'], avg_4000, yerr=yerr_4000,fmt='none', color = 'c' )
+ax1.errorbar(df_40000['times'], avg_40000, yerr=yerr_40000,fmt='none', color = 'b')
+ax1.errorbar(df_400000['times'], avg_400000, yerr=yerr_400000,fmt='none', color = 'k' )
 
 
 
 ax1.set(xlabel='Time (day $^{-1}$)', ylabel='Cells (ml$^{-1}$)')
 ax1.set_title('Prochlorococcus Biomass Dynamics', fontsize=18)
-ax1.legend(loc='lower right',prop={'size': 10}, fontsize=12)
+ax1.legend(loc='lower right',prop={'size': 10}, fontsize=16)
 
    
 #nutrient subplot
@@ -384,7 +385,7 @@ ax2.set_yscale('log')    #does this produce a different result than semilog? Tes
 
 ax2.set(xlabel='Time (day $^{-1})$', ylabel='Nutrient Concentration (nmol ml$^{-1}$)')
 ax2.set_title('NH4 Dynamics',fontsize=18)
-ax2.legend(loc='lower left',prop={'size': 10}, fontsize=12)
+ax2.legend(loc='lower left',prop={'size': 10}, fontsize=16)
 ax2.yaxis.set_label_position("right")
 ax2.yaxis.tick_right()
 
