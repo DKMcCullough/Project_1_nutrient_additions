@@ -7,7 +7,7 @@ location: /Users/dkm/Documents/Talmy_research/Zinser_and_Ben/Project_1_nutrient_
 author: DKM
 
 
-get a real fix on zero treatment for NH4 data set of  MIT9215
+get a nice fi
 
 '''
 
@@ -150,7 +150,7 @@ for t in times:
 ####################################
 
 
-fig, (ax1) = plt.subplots(figsize=(10,7))
+fig, (ax1) = plt.subplots(figsize=(12,7))
 
 ax1.plot(times,PsEuler0,color = 'm' , label  = 'zero NH4 added')   #model
 
@@ -178,7 +178,7 @@ pnames = ('alpha','vmax','nrdelta','nddelta')
 pvalues = (k1,k2,nrdelta,nddelta)
 
 ax2 = plt.table([pvalues], colLabels=(pnames) ,loc='lower center')
-ax2.set_fontsize(14)
+
 
 plt.show()
 
