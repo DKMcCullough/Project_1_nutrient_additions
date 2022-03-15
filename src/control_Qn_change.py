@@ -101,7 +101,7 @@ times = np.linspace(0,ndays,int(ndays/step))
 Qn = (9.4e-15*(1/(14.0))*1e+9)   #Nitrogen Quota for Pro from Bertillison? 
 
 P = 1e4
-S_base = 3.0    #nM N             #(treatment  = S
+S_base = 4.2e6    #nM N             #(treatment  = S
 
 ##################################
 
@@ -134,8 +134,8 @@ for t in times:
             delta = nrdelta
         else:
             delta = nddelta
-        dPdt = k2 * P * S /( (k2/k1) + S) - delta*P   # <--  should this also have Qn in it
-        dSdt = -P*(( k2*S)/((k2/k1)+S))*Qn         # <--  should Qn be in fractrion on both sides next to S?
+        dPdt = k2 * P * (S*Qn) /( (k2/k1) + (S*Qn)) - delta*P
+        dSdt = -P*(( k2*(S*Qn))/((k2/k1)+(S*Qn)))
         if S+dSdt*step <0:                    #making sure S isnt taken negative and therefore causing issues when we log transform the data
                 S = 4e-47
         else:
