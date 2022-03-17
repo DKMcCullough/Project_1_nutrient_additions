@@ -182,6 +182,8 @@ ax2.set_fontsize(14)
 
 plt.show()
 
+print(S_base)
+
 
 
 

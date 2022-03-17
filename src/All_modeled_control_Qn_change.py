@@ -149,7 +149,7 @@ for i in treatments:
 '''
 #TypeError: unsupported operand type(s) for *: 'dict' and 'float'
 
-S_base = 3.0 
+S_base = 4.2e6 #3.0 
 k1= 0.9
 
 k2 = 0.5       # seems to control steepness of slope
@@ -181,8 +181,8 @@ for t in times:
             delta = nrdelta
         else:
             delta = nddelta
-        dPdt = k2 * P * S /( (k2/k1) + S) - delta*P
-        dSdt = -P*(( k2*S)/((k2/k1)+S))*Qn
+        dPdt = k2 * P * (S*Qn) /( (k2/k1) + (S*Qn)) - delta*P
+        dSdt = -P*(( k2*(S*Qn))/((k2/k1)+(S*Qn)))
         if S+dSdt*step <0:                    #making sure S isnt taken negative and therefore causing issues when we log transform the data
                 S = 4e-47
         else:
@@ -214,8 +214,8 @@ for t in times:
             delta = nrdelta
         else:
             delta = nddelta
-        dPdt = k2 * P * S /( (k2/k1) + S) - delta*P
-        dSdt = -P*(( k2*S)/((k2/k1)+S))*Qn
+        dPdt = k2 * P * (S*Qn) /( (k2/k1) + (S*Qn)) - delta*P
+        dSdt = -P*(( k2*(S*Qn))/((k2/k1)+(S*Qn)))
         if S+dSdt*step <0:                    #making sure S isnt taken negative and therefore causing issues when we log transform the data
                 S = 4e-47
         else:
@@ -250,8 +250,8 @@ for t in times:
             delta = nrdelta
         else:
             delta = nddelta
-        dPdt = k2 * P * S /( (k2/k1) + S) - delta*P
-        dSdt = -P*(( k2*S)/((k2/k1)+S))*Qn
+        dPdt = k2 * P * (S*Qn) /( (k2/k1) + (S*Qn)) - delta*P
+        dSdt = -P*(( k2*(S*Qn))/((k2/k1)+(S*Qn)))
         if S+dSdt*step <0:                    #making sure S isnt taken negative and therefore causing issues when we log transform the data
                 S = 4e-47
         else:
@@ -286,8 +286,8 @@ for t in times:
             delta = nrdelta
         else:
             delta = nddelta
-        dPdt = k2 * P * S /( (k2/k1) + S) - delta*P
-        dSdt = -P*(( k2*S)/((k2/k1)+S))*Qn
+        dPdt = k2 * P * (S*Qn) /( (k2/k1) + (S*Qn)) - delta*P
+        dSdt = -P*(( k2*(S*Qn))/((k2/k1)+(S*Qn)))
         if S+dSdt*step <0:                    #making sure S isnt taken negative and therefore causing issues when we log transform the data
                 S = 4e-47
         else:
@@ -322,8 +322,8 @@ for t in times:
             delta = nrdelta
         else:
             delta = nddelta
-        dPdt = k2 * P * S /( (k2/k1) + S) - delta*P
-        dSdt = -P*(( k2*S)/((k2/k1)+S))*Qn
+        dPdt = k2 * P * (S*Qn) /( (k2/k1) + (S*Qn)) - delta*P
+        dSdt = -P*(( k2*(S*Qn))/((k2/k1)+(S*Qn)))
         if S+dSdt*step <0:                    #making sure S isnt taken negative and therefore causing issues when we log transform the data
                 S = 4e-47
         else:
@@ -356,8 +356,8 @@ for t in times:
             delta = nrdelta
         else:
             delta = nddelta
-        dPdt = k2 * P * S /( (k2/k1) + S) - delta*P
-        dSdt =-P*(( k2*S)/((k2/k1)+S))*Qn
+        dPdt = k2 * P * (S*Qn) /( (k2/k1) + (S*Qn)) - delta*P
+        dSdt = -P*(( k2*(S*Qn))/((k2/k1)+(S*Qn)))
         if S+dSdt*step <0:                    #making sure S isnt taken negative and therefore causing issues when we log transform the data
                 S = 4e-47
         else:
