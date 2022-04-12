@@ -9,6 +9,10 @@ author: DKM
 
 goal: import and all treatments of NH4 addition experients using MIT9215
 
+
+working on: Get params into loops so you can have differfent kdams for differentt lines
+
+
 '''
 
 
@@ -30,7 +34,7 @@ from pylab import *
 ############################
 
 
-df_all = pd.read_csv("/Users/dkm/Documents/Talmy_research/Zinser_and_Ben/Project_1_nutrient_additions/data/NH4_add.csv")
+df_all = pd.read_csv("../data/NH4_add.csv")
 df_all['rep1'] = df_all['rep1'].fillna(value = 0.0) #filling Nans with 0.0 in 'rep1' column 
 df_all['rep2'] = df_all['rep2'].fillna(value = 0.0 )#filling Nans with 0.0 in 'rep2' column 
 df_all = df_all.dropna(axis = 1)     #taking NaN columns off the end of df but had to fill rep 1 and 2 Nans first
@@ -403,11 +407,11 @@ ax1.set(xlabel= 'Time (days)', ylabel='Biomass (cells  ml$^{-1}$)', yscale = "lo
 ax1.set_title('Prochlorococcus Biomass over time', fontsize=20)
 #ax1.legend(loc='lower center',prop={'size': 10}, fontsize=12)
 
-
-SsEulers = dict() #need to populate with Euler solutions from all runs. 
-PsEulers = dict() #need to populate with Euler solutions from all runs.
-
 '''
+#SsEulers = dict() #need to populate with Euler solutions from all runs. 
+#PsEulers = dict() #need to populate with Euler solutions from all runs.
+
+
 for i in treatments: 
     df = dc['df_'+str(i)]
     times = df['times']
