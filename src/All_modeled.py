@@ -107,7 +107,7 @@ for i in dc :
 step = 0.1
 ndays = 35
 times = np.linspace(0,ndays,int(ndays/step))
-Qn = (9.4e-15*(1/(14.0))*1e+9)   #Nitrogen Quota for Pro from Bertillison? 
+Qn = (9.6e-15*(1/(14.0))*1e+9)   #Nitrogen Quota for Pro from Bertillison? 
 
 P = 1e4
 #S = (treatment + (#some based level of N in the media))
@@ -375,7 +375,8 @@ for t in times:
 ####################################
 
 
-fig1, (ax1, ax2) = plt.subplots(1, 2, figsize=(12,7))
+#fig1, (ax1, ax2) = plt.subplots(1, 2, figsize=(12,7))
+fig1,ax1 = plt.subplots(figsize=(10,7))
 fig1.suptitle('NH4 trials modeled with data', fontweight='bold', fontsize=25)
 
 
@@ -405,7 +406,7 @@ for i in treatments:
 
 ax1.set(xlabel= 'Time (days)', ylabel='Biomass (cells  ml$^{-1}$)', yscale = "log")
 ax1.set_title('Prochlorococcus Biomass over time', fontsize=20)
-#ax1.legend(loc='lower center',prop={'size': 10}, fontsize=12)
+ax1.legend(loc='upper left',prop={'size': 10}, fontsize=12)
 
 '''
 #SsEulers = dict() #need to populate with Euler solutions from all runs. 
@@ -417,7 +418,7 @@ for i in treatments:
     times = df['times']
     Ss = SsEulers['SsEuler_'+ str(i)]
     ax1.plot(times, Ss, label = ('nM NH4 :' + str(i))) #color = colors[i])
-'''
+
     
 #nutrient subplot
 ax2.plot(times,SsEuler0,color = 'm' , label  = 'zero NH4 added')
@@ -435,7 +436,7 @@ ax2.set_title('NH4 concentrations over time',fontsize=20)
 ax2.yaxis.set_label_position("right")
 ax2.yaxis.tick_right()
 
-
+'''
 
 #plt.legend(prop={"size":14})
 
