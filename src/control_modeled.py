@@ -152,7 +152,7 @@ for t in times:
 
 fig, (ax1) = plt.subplots(figsize=(10,7))
 
-ax1.plot(times,PsEuler0,color = 'm' , label  = 'zero NH4 added')   #model
+ax1.plot(times, PsEuler0, color = 'orange' , label  = 'model')   #model
 
 
 df_0 = dc['df_0']              #slicing data for graphing ease
@@ -161,9 +161,9 @@ data = avgs['avg_df_0']
 yerr_graph = yerrs['yerr_df_0']
 
 
-ax1.plot(times, data, linestyle = 'None', marker= 'o', label = ('0 nM NH4'), color = 'm')  #color = colors(i))
-ax1.errorbar(times, data, yerr = yerr_graph, fmt='none',color = 'm')   
-
+ax1.plot(times, data, linestyle = 'None', marker= 's',markersize = 12, label = ('0 nM NH4'), color = 'orange')  #color = colors(i))
+ax1.errorbar(times, data, yerr = yerr_graph, fmt='none',color = 'orange')   
+ax1.plot(times,data,linestyle='-', linewidth=0.25, color='black', marker = 'None')
 
 
 ax1.set(xlabel= 'Time (days)', ylabel='Biomass (cells  ml$^{-1}$)', yscale = "log")
@@ -174,10 +174,10 @@ ax1.tick_params(axis = 'both', labelsize=20)
 ax1.xaxis.label.set_size(18)
 ax1.yaxis.label.set_size(18)
 
-pnames = ('alpha','vmax','nrdelta','nddelta')
-pvalues = (k1,k2,nrdelta,nddelta)
+#pnames = ('alpha','vmax','nrdelta','nddelta')
+#pvalues = (k1,k2,nrdelta,nddelta)
 
-ax2 = plt.table([pvalues], colLabels=(pnames) ,loc='lower center')
+#ax2 = plt.table([pvalues], colLabels=(pnames) ,loc='lower center')
 ax2.set_fontsize(14)
 
 plt.show()
