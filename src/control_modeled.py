@@ -163,7 +163,7 @@ yerr_graph = yerrs['yerr_df_0']
 
 ax1.plot(times, data, linestyle = 'None', marker= 's',markersize = 12, label = ('0 nM NH4'), color = 'orange')  #color = colors(i))
 ax1.errorbar(times, data, yerr = yerr_graph, fmt='none',color = 'orange')   
-ax1.plot(times,data,linestyle='-', linewidth=0.25, color='black', marker = 'None')
+#ax1.plot(times,data,linestyle='-', linewidth=0.25, color='black', marker = 'None')
 
 
 ax1.set(xlabel= 'Time (days)', ylabel='Biomass (cells  ml$^{-1}$)', yscale = "log")
@@ -178,7 +178,7 @@ ax1.yaxis.label.set_size(18)
 #pvalues = (k1,k2,nrdelta,nddelta)
 
 #ax2 = plt.table([pvalues], colLabels=(pnames) ,loc='lower center')
-ax2.set_fontsize(14)
+#ax2.set_fontsize(14)
 
 plt.show()
 

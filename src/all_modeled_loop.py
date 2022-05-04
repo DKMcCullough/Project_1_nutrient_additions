@@ -46,15 +46,20 @@ df_all = df_all.rename({'Time(days)':'times'}, axis=1)    #'renaming column to m
 
 ####################################
 
+ros_uni = df_all['treatment'].unique()
+treatments = ros_uni*1e-3   #1e-3 to take treatment nM (M is in L, not mL...so have to )
 
-treatments = np.array([0,40,400,4000,40000,400000])*1e-3   #1e-3 to take treatment nM (M is in L, not mL...so have to )
+#np.array([0,40,400,4000,40000,400000])*1e-3   #1e-3 to take treatment nM (M is in L, not mL...so have to )
 
 
 dc = dict()
 
 ####slicing df into treatments and saving into dictionary (dc)######
-for t in treatments:
-    df_t = df_all[df_all["treatment"].isin([t])]
+for count in range(treatments.shape[0]): 
+    #print(count)
+    t = treatments[count]
+    df_t = df_all[df_all["treatment"].isin([t])]   #is this grabbing all the corrrect data???I can't tell.
+    print(df_t)
     name = ('df_' + str(t))
     dc.update({name : df_t})  #update dictionary of dfs with each loop itteration. 
 
@@ -97,8 +102,8 @@ for d in dc :
 
 #################################
 
-step = 0.001
-ndays = 40
+step = 0.002
+ndays = 35
 times = np.linspace(0,ndays,int(ndays/step))
 
 Qn = (9.6e-15*(1/(14.0))*1e+9)   #Nitrogen Quota for Pro from Bertillison? 
@@ -118,12 +123,13 @@ markers = ('s','v','P','o','*','d')
 
 ##################################
 
-fig1,ax1  = plt.subplots(figsize=(12,7))
+fig1,ax1  = plt.subplots(figsize=(10,7))
 fig2,ax2  = plt.subplots(figsize=(12,7))
-fig3,ax3 = plt.subplots(figsize=(12,7))
+#fig3,ax3 = plt.subplots(figsize=(12,7))
 
     #nM N per ml for units      #    0.164 micromolar rediual N from Calfee_et_al 2022
 
+mc = np.array([])
 
 for count in range(treatments.shape[0]): 
     print(count)
@@ -154,7 +160,7 @@ for count in range(treatments.shape[0]):
         P = P + dPdt*step
     ax1.plot(times,(PsEuler), linestyle = 'dashed', color = colors[count]) 
     ax2.plot(times,(SsEuler), linestyle = 'dashed', color = colors[count])
-    ax3.plot(t,kdam)
+
 
 
 ####################################
@@ -171,11 +177,13 @@ for count in range(treatments.shape[0]):
     data = avgs['avg_df_'+ str(t)]
     yerr_graph = yerrs['yerr_df_'+ str(t)]
     #m = max(data)
+    print(count)
     ax1.plot(times, data, linestyle = 'None', marker= markers[count],  markersize= 12, label = (str(t) +' nM NH4'), color = colors[count])  
     ax1.plot(times,data,linestyle='-', linewidth=0.25, color='black', marker = 'None')
     ax1.errorbar(times, data, yerr = yerr_graph, fmt='none', color = colors[count])   
 
-
+#Axes.set_ylim(self, ymin=1e-20, ymax=1e20)
+ax1.set_ybound( lower=10**-20, upper=10*20)
 ax1.set(xlabel= 'Time (days)', ylabel='Biomass (cells  ml$^{-1}$)', yscale = "log")
 ax1.set_title('Prochlorococcus Biomass over time', fontsize=25)
 ax1.legend(loc='upper left',prop={'size': 12}, fontsize=22)

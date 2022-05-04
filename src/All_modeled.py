@@ -66,7 +66,8 @@ for i in treatments:
 
 avgs = dict()
 yerrs = dict()
-
+made = dict()  # a dictionary of the max value of cells in each treatment
+start = dict()
 #calculating avg point and yerr for each treatment
 
 for i in dc :
@@ -74,10 +75,22 @@ for i in dc :
     rep_df_i = df_i[['rep1', 'rep2', 'rep3', 'rep4', 'rep5', 'rep6']]
     avg_i = rep_df_i.mean(axis=1)  
     avgs.update({'avg_'+i : avg_i })
+    made_i =max(avg_i) 
+    made.update({'made_'+i : made_i })
+    start_i = list(avg_i.items())[0][1]
+    start.update({'start_'+i : start_i })
     yerr_i = rep_df_i.std(axis=1)   
     yerrs.update({'yerr_'+i : yerr_i })
     
+net = {key: made[key] - start.get(key, 0) for key in made}  #Not sure this is correct still however...
+#CANNOT FOR THE LIFE OF ME GET THIS TO TAKE THE AVG  IN JUST EACH INITIAL CONDTITION AND STORE IT AS A 'START' VALUE THAT EVENTUALLY I CAN REPRESENT A NET CELLS MADE '
+'''for t in treatments: 
+    zip(m,s) in made, start 
+    net = m-s
+    nets = np.array([nets,net])
+    
 
+'''
 
 
 ################################
@@ -104,8 +117,8 @@ for i in dc :
 
 #################################
 
-step = 0.1
-ndays = 42
+step = 0.002
+ndays = 35
 times = np.linspace(0,ndays,int(ndays/step))
 Qn = (9.6e-15*(1/(14.0))*1e+9)   #Nitrogen Quota for Pro from Bertillison? 
 
@@ -383,13 +396,17 @@ fig1,ax1 = plt.subplots(figsize=(12,7))
 ##cell abundance subplot##
 
     #model
-ax1.plot(times,PsEuler0,color = 'orange' )   #, label  = 'zero NH4 added')
+#ax1.plot(times,PsEuler0,color = 'orange' )   #, label  = 'zero NH4 added')
 #ax1.plot(times,PsEuler40,color = 'r' )   #, label = ' + 40 NH4 treatment')
 #ax1.plot(times,PsEuler400,color = 'green' )   #, label = ' + 400 NH4 treatment')
 #ax1.plot(times,PsEuler4000, color = 'c')   #, label = ' + 4000 NH4 added treatment')
 #ax1.plot(times,PsEuler40000, color = 'purple' )   #, label = ' + 40000 NH4 treatment')
 #ax1.plot(times,PsEuler400000 , color = 'k' )   #, label = ' + 400000 NH4 treatment')
 
+ 
+ros_uni = df_all['treatment'].unique()
+treat_l = ros_uni*1e-3   #1e-3 to take treatment nM (M is in L, not mL...so have to )
+labels = treat_l
 
    #data
 colors = ('orange', 'r', 'green', 'c', 'purple', 'k') #make into a set in loop? for c in colors, color = count(c)?????
@@ -402,7 +419,7 @@ for i in treatments:
     times = df['times']
     data = avgs['avg_df_'+ str(i)]
     yerr_graph = yerrs['yerr_df_'+ str(i)]
-    ax1.plot(times, data, linestyle = 'None', marker= markers[count],  markersize= 12, label = (str(i) +' nM NH4'), color = colors[count])  
+    ax1.plot(times, data, linestyle = 'None', marker= markers[count],  markersize= 12, label = (str(labels[count]) +' nM NH4'), color = colors[count])  
     ax1.plot(times,data,linestyle='-', linewidth=0.25, color='black', marker = 'None')
     ax1.errorbar(times, data, yerr = yerr_graph, fmt='none', color = colors[count])   
 
@@ -453,9 +470,97 @@ ax2.yaxis.tick_right()
 #plt.tick_params(axis='both', which = 'both', length = 2,  labelsize=16,)
 
 
-plt.show()
+#plt.show()
 
 #finding number of cells possible with each N treatment
+'''
+nc = np.array([])
+for t in treatments: 
+    new_cells = t*Qn
+    nc = np.append(nc,new_cells)
+    print(nc)
+
+total  = (nc)+1e4
+'''
+
+
+
+ros_uni = df_all['treatment'].unique()
+treatments = ros_uni*1e-3   #1e-3 to take treatment nM (M is in L, not mL...so have to )
+
+#np.array([0,40,400,4000,40000,400000])*1e-3   #1e-3 to take treatment nM (M is in L, not mL...so have to )
+
+
+
+
+step = 0.002
+ndays = 35
+times = np.linspace(0,ndays,int(ndays/step))
+
+Qn = (9.6e-15*(1/(14.0))*1e+9)   #Nitrogen Quota for Pro from Bertillison? 
+P = 1e4
+k1s = [0.9, 0.9, 0.9, 0.9, 0.9,0.9]  #[0.02,]     
+k2s = [0.5, 0.5, 0.5, 0.5, 0.5,0.5]   #[0.32]
+kdams = [0.002,0.002, 0.002, 0.002, 0.002, 0.002]    #[0.007]
+kddams = [0.115, 0.115, 0.115, 0.115, 0.115,0.115]    #[ 0.03,]
+
+params = list(zip(k1s,k2s,kdams,kddams))
+S_base = 3.0 
+colors = ('orange', 'r', 'green', 'c', 'purple', 'k') #make into a set in loop? for c in colors, color = count(c)?????
+markers = ('s','v','P','o','*','d')
+##################################
+
+#   Integration  
+
+##################################
+
+#fig1,ax1  = plt.subplots(figsize=(10,7))
+fig2,ax2  = plt.subplots(figsize=(12,7))
+fig3,ax3 = plt.subplots(figsize=(12,7))
+
+    #nM N per ml for units      #    0.164 micromolar rediual N from Calfee_et_al 2022
+ax2.set_ybound( lower=10**-20, upper=10*20)
+plt.semilogy()
+plt.xticks(fontsize = 20)
+plt.yticks(fontsize = 20)
+'''
+for count in range(treatments.shape[0]): 
+    print(count)
+    t = treatments[count]
+    k1 = params[count][0]
+    k2 = params[count][1]
+    kdam = params[count][2]
+    kddam = params[count][3]
+    ks = (k2/k1)   #set max value for this that is know from lit? (between 0.01 and 0.015 for N metabolism in )
+    SsEuler = np.array([])
+    PsEuler = np.array([])
+    P = 1e4
+    S = (S_base + t )
+    print(kdam,kddam)
+    for t in times:
+        PsEuler = np.append(PsEuler,P)
+        SsEuler = np.append(SsEuler,S)
+        if (S>1e-4):
+            delta = kdam
+        else:
+            delta = kddam 
+        dPdt = k2 * P * S /( (k2/k1) + S) - delta*P
+        dSdt = -P*(( k2*S)/((k2/k1)+S))*Qn
+        #if S+dSdt*step <0:                    #making sure S isnt taken negative and therefore causing issues when we log transform the data
+         #       S = 4e-47
+        #else:
+        S = S + dSdt*step
+        P = P + dPdt*step
+    ax1.plot(times,(PsEuler), linestyle = 'dashed', color = colors[count]) 
+    ax2.plot(times,(SsEuler), linestyle = 'dashed', color = colors[count], label = (str(labels[count]) +' nM NH4'))
+    ax3.plot(t,kdam)
+'''
+
+
+'''
+
+# and cell # and such now 
+
 
 nc = np.array([])
 for t in treatments: 
@@ -465,4 +570,17 @@ for t in treatments:
 
 total  = (nc)+1e4
 
-
+ms = np.array([]) #made cells 
+for count in range(treatments.shape[0]): 
+    print(count)
+    t = treatments[count]
+    #print(count)
+    df = dc['df_'+str(t)]
+    times = df['times']
+    data = avgs['avg_df_'+ str(t)]
+    yerr_graph = yerrs['yerr_df_'+ str(t)]
+    m = max(data)
+    #print(m)
+    mc = np.append(ms,m)
+    #print(mc)
+'''
