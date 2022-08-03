@@ -396,12 +396,12 @@ fig1,ax1 = plt.subplots(figsize=(12,7))
 ##cell abundance subplot##
 
     #model
-#ax1.plot(times,PsEuler0,color = 'orange' )   #, label  = 'zero NH4 added')
-#ax1.plot(times,PsEuler40,color = 'r' )   #, label = ' + 40 NH4 treatment')
-#ax1.plot(times,PsEuler400,color = 'green' )   #, label = ' + 400 NH4 treatment')
-#ax1.plot(times,PsEuler4000, color = 'c')   #, label = ' + 4000 NH4 added treatment')
-#ax1.plot(times,PsEuler40000, color = 'purple' )   #, label = ' + 40000 NH4 treatment')
-#ax1.plot(times,PsEuler400000 , color = 'k' )   #, label = ' + 400000 NH4 treatment')
+ax1.plot(times,PsEuler0,color = 'orange' )   #, label  = 'zero NH4 added')
+ax1.plot(times,PsEuler40,color = 'r' )   #, label = ' + 40 NH4 treatment')
+ax1.plot(times,PsEuler400,color = 'green' )   #, label = ' + 400 NH4 treatment')
+ax1.plot(times,PsEuler4000, color = 'c')   #, label = ' + 4000 NH4 added treatment')
+ax1.plot(times,PsEuler40000, color = 'purple' )   #, label = ' + 40000 NH4 treatment')
+ax1.plot(times,PsEuler400000 , color = 'k' )   #, label = ' + 400000 NH4 treatment')
 
  
 ros_uni = df_all['treatment'].unique()
@@ -523,7 +523,7 @@ ax2.set_ybound( lower=10**-20, upper=10*20)
 plt.semilogy()
 plt.xticks(fontsize = 20)
 plt.yticks(fontsize = 20)
-'''
+
 for count in range(treatments.shape[0]): 
     print(count)
     t = treatments[count]
@@ -554,7 +554,7 @@ for count in range(treatments.shape[0]):
     ax1.plot(times,(PsEuler), linestyle = 'dashed', color = colors[count]) 
     ax2.plot(times,(SsEuler), linestyle = 'dashed', color = colors[count], label = (str(labels[count]) +' nM NH4'))
     ax3.plot(t,kdam)
-'''
+
 
 
 '''
