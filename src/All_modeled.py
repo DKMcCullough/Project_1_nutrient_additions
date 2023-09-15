@@ -167,9 +167,9 @@ for i in treatments:
 #TypeError: unsupported operand type(s) for *: 'dict' and 'float'
 
 S_base = 3.0 
-k1= 0.9
+k1= 0.9 #alpha for N 
 
-k2 = 0.5       # seems to control steepness of slope
+k2 = 0.5       # Vmax
 
 nrdelta = 0.002      #nutrient replete delta
 nddelta = 0.115       #nutrient deplete delta
